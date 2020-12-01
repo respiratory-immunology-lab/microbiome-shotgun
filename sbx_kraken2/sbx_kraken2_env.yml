@@ -1,0 +1,8 @@
+# Conda environment file for kraken2. We use this for certain Snakemake
+# rules to prevent breaking Sunbeam as the kraken1 installed with Sunbeam
+# v<3 is not compatible with kraken2.
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - kraken2

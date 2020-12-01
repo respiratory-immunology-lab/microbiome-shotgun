@@ -1,0 +1,3 @@
+sbx_kraken2:
+  threads: 4
+  db: ''
