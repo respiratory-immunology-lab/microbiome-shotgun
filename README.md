@@ -1,7 +1,7 @@
 Using the shotgun-sunbeam pipeline for shotgun metagenomics sequencing
 ======================================================================
 
-TBD
+This pipeline is based on Sunbeam pipeline, which provides a foundation to build more in-depth analyses and to enable comparisons in metagenomic sequencing experiments by removing problematic, low-complexity reads and standardizing post-processing and analytical steps. Sunbeam is written in Python using the Snakemake workflow management software. This pipeline has been optimised to work on M3 cluster.
 
 ## Working on the cluster
 
@@ -28,7 +28,7 @@ module load [module]
 scancel [jobID]
 ```
 
-## Downloading the data from BaseSpace
+## Downloading ata from BaseSpace
 
 See https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-overview for downloading data from BaseSpace straight to the cluster. 
 
@@ -37,7 +37,7 @@ See https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-
 ./bs -c Australia download project -i [projectID] -o [directory]
 ```
 
-## Installing Sunbeam on the cluster (to do only ONCE)
+## Installing Sunbeam on the cluster
 
 Sunbeam is a pipeline written in snakemake that simplifies and automates many of the steps in metagenomic sequencing analysis. See https://sunbeam.readthedocs.io/en/latest/index.html for more information.
 
@@ -56,6 +56,7 @@ chmod u+w .git/objects/pack/*
 bash install.sh
 
 # Test the installation
+cd sunbeam-stable
 tests/run_tests.bash -e sunbeam
 ```
 
@@ -84,7 +85,19 @@ cat extensions/sbx_eggnog/config.yml >> /home/cpat0003/of33_scratch/Shotgun/MD4_
 
 ## Databases
 
-1) Blast databases for nucleic acid (nt) and protein (nr) mapping module load blast
+1) Host genome(s)
+
+We need the host genomes to remove host reads before metagenomics analysis. Of note, these need to be located in a separate folder, be decompressed, and end up with `.fasta`. 
+
+```
+# Mouse
+wget http://ftp.ensembl.org/pub/release-98/fasta/mus_musculus/dna/Mus_musculuss.GRCm38.dna_sm.toplevel.fa.gz
+
+# Human
+wget http://ftp.ensembl.org/pub/release-98/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna_sm.toplevel.fa.gz
+```
+
+2) Blast databases for nucleic acid (nt) and protein (nr) mapping module load blast
 
 ```
 wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz
@@ -96,23 +109,21 @@ gunzip nr.gz
 makeblastdb -in nr -out nr -dbtype prot
 ```
 
-2) Kraken databases for taxonomy
+3) Kraken databases for taxonomy
+
+There are some small pre-compiled databases available. However, because we want to go in more depth and are interested in fungi as well we will build our own.
 
 ```
-# Kraken
-wget https://ccb.jhu.edu/software/kraken/dl/minikraken_20171019_8GB.tgz
-tar -xvzf minikraken_20171019_8GB.tgz
+# Install the taxonomy
+kraken2-build --download-taxonomy --db [mydatabase]
 
-# Kraken2
-wget ftp://ftp.ccb.jhu.edu/pub/data/kraken2_dbs/minikraken_8GB_202003.tgz
-tar -xvzf minikraken_8GB_202003.tgz
-Another database (eg fungi)
-Check https://github.com/mw55309/Kraken_db_install_scripts for more details of construction a Kraken-compatible database for fungi or other. Metaphlan extension contains an eucaryotic database as well.
+# Download reference libraries
+kraken2-build --download-library archaea --db [mydatabase]
+kraken2-build --download-library bacteria --db [mydatabase]
+kraken2-build --download-library fungi --db [mydatabase]
+kraken2-build --download-library viral --db [mydatabase]
+
 ```
-
-3) Other databases 
-
-Check https://github.com/mw55309/Kraken_db_install_scripts for more details of construction a Kraken-compatible database for fungi or other. Metaphlan extension contains an eucaryotic database as well.
 
 ## Initialise your sunbeam project
 
