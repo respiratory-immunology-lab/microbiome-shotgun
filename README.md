@@ -117,12 +117,14 @@ There are some small pre-compiled databases available. However, because we want 
 # Install the taxonomy
 kraken2-build --download-taxonomy --db [mydatabase]
 
+# Load blast module (for low complexity sequences masking at the next step)
+module load blast
+
 # Download reference libraries
 kraken2-build --download-library archaea --db [mydatabase]
 kraken2-build --download-library bacteria --db [mydatabase]
 kraken2-build --download-library fungi --db [mydatabase]
 kraken2-build --download-library viral --db [mydatabase]
-
 ```
 
 ## Initialise your sunbeam project
