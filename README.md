@@ -42,11 +42,21 @@ See https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-
 Sunbeam is a pipeline written in snakemake that simplifies and automates many of the steps in metagenomic sequencing analysis. See https://sunbeam.readthedocs.io/en/latest/index.html for more information.
 
 ```
+# Load git mocule on cluster
 module load git
+
+# Clone sunbeam
 git clone -b stable https://github.com/sunbeam-labs/sunbeam sunbeam-stable
+
+# Change permissions (if not, creates issues with cluster)
 cd sunbeam-stable
-chmod u+w .git/objects/pack/* # Very important, to work around permission issues on the cluster!
+chmod u+w .git/objects/pack/*
+
+# Install sunbeam
 bash install.sh
+
+# Test the installation
+tests/run_tests.bash -e sunbeam
 ```
 
 You will also need some extensions.
