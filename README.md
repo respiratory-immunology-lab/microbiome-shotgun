@@ -91,10 +91,10 @@ We need the host genomes to remove host reads before metagenomics analysis. Of n
 
 ```
 # Mouse
-wget http://ftp.ensembl.org/pub/release-98/fasta/mus_musculus/dna/Mus_musculuss.GRCm38.dna_sm.toplevel.fa.gz
+wget http://ftp.ensembl.org/pub/release-98/fasta/mus_musculus/dna/Mus_musculuss.GRCm38.dna_sm.primary_assembly.fa.gz
 
 # Human
-wget http://ftp.ensembl.org/pub/release-98/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna_sm.toplevel.fa.gz
+wget http://ftp.ensembl.org/pub/release-98/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa.gz
 ```
 
 2) Blast databases for nucleic acid (nt) and protein (nr) mapping module load blast
