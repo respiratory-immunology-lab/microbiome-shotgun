@@ -132,6 +132,7 @@ kraken2-build --download-library viral --db [mydatabase]
 sunbeam init takes one required argument: a path to your project folder. This folder will be created if it doesn’t exist. You can also specify the path to your gzipped fastq files, and Sunbeam will try to guess how your samples are named, and whether they’re paired.
 
 ```
+source activate sunbeam
 sunbeam init --data_fp [/path/to/fastq/files /path/to/my_project]
 ```
 
