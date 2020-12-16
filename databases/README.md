@@ -70,3 +70,9 @@ bash install_bracken.sh
 # Build the database
 bracken-build -d [mydatabase] -t [numberofthreads] -x [directorywherekraken2isinstalled]
 ```
+
+## Recommended smux parameters
+
+```
+smux n --nodes=1 --ntasks=1 --cpuspertask=36 --mem=100000 -J Databases --time=5-00:00:00
+```
