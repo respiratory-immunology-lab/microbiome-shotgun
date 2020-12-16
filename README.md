@@ -85,49 +85,13 @@ cat extensions/sbx_eggnog/config.yml >> /home/cpat0003/of33_scratch/Shotgun/MD4_
 
 ## Databases
 
-1) Host genome(s)
+1) Host genome(s) for decontamination
+2) Kraken databases for taxonomy
+3) Bracken databases (related to kraken2)
+4) Blast databases for nucleic acid (nt) and protein (nr) mapping
 
-We need the host genomes to remove host reads before metagenomics analysis. Of note, these need to be located in a separate folder, be decompressed, and end up with `.fasta`. 
+All these databases are available on the cluster at `~/of33/Databases/shotgun`. If you need to re-build your own (at your own risks!) follow the instructions provided (here)[https://github.com/respiratory-immunology-lab/microbiome-shotgun/tree/master/databases].
 
-```
-# Mouse
-wget http://ftp.ensembl.org/pub/release-98/fasta/mus_musculus/dna/Mus_musculuss.GRCm38.dna_sm.primary_assembly.fa.gz
-
-# Human
-wget http://ftp.ensembl.org/pub/release-98/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa.gz
-```
-
-2) Blast databases for nucleic acid (nt) and protein (nr) mapping module load blast
-
-```
-wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz
-gunzip nt.gz
-makeblastdb -in nt -out nt -dbtype nucl
-
-wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz
-gunzip nr.gz
-makeblastdb -in nr -out nr -dbtype prot
-```
-
-3) Kraken databases for taxonomy
-
-There are some small pre-compiled databases available. However, because we want to go in more depth and are interested in fungi as well we will build our own. A wrapper script for the database construction `builddatabase.sh` is provided [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/builddatabase.sh).
-
-```
-# Install the taxonomy
-kraken2-build --download-taxonomy --db [mydatabase]
-
-# Load blast module (for low complexity sequences masking)
-module load blast
-
-# Download reference libraries
-kraken2-build --download-library archaea --db [mydatabase]
-kraken2-build --download-library bacteria --db [mydatabase]
-kraken2-build --download-library fungi --db [mydatabase]
-kraken2-build --download-library viral --db [mydatabase]
-
-# Build the database (takes time)
-kraken2-build --build --db [mydatabase]
 ```
 
 ## Initialise your sunbeam project
