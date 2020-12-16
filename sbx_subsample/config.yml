@@ -1,3 +1,0 @@
-sbx_subsample:
-  threads: 4
-  num_reads: 100000
