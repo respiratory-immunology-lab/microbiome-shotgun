@@ -1,0 +1,10 @@
+rule example_rule:
+    input:
+        #files required for input	
+    output:
+        #files created after successful rule completion
+    conda:
+        "sbx_template_env.yml"
+    shell:
+        #commands run during rule
+
