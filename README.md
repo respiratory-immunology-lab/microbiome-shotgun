@@ -68,7 +68,7 @@ source activate sunbeam
 cd sunbeam-stable
 
 # Kraken 2 extension
-git clone https://github.com/louiejtaylor/sbx_kraken2/ extensions/sbx_kraken2
+git clone https://github.com/louiejtaylor/sbx_kraken2 extensions/sbx_kraken2
 cat extensions/sbx_kraken2/config.yml >> /home/cpat0003/of33_scratch/Shotgun/MD4_project/sunbeam_config.yml
 
 # Subsample extension (for assembly)
@@ -111,13 +111,13 @@ makeblastdb -in nr -out nr -dbtype prot
 
 3) Kraken databases for taxonomy
 
-There are some small pre-compiled databases available. However, because we want to go in more depth and are interested in fungi as well we will build our own.
+There are some small pre-compiled databases available. However, because we want to go in more depth and are interested in fungi as well we will build our own. A wrapper script for the database construction `builddatabase.sh` is provided [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/).
 
 ```
 # Install the taxonomy
 kraken2-build --download-taxonomy --db [mydatabase]
 
-# Load blast module (for low complexity sequences masking at the next step)
+# Load blast module (for low complexity sequences masking)
 module load blast
 
 # Download reference libraries
@@ -125,6 +125,9 @@ kraken2-build --download-library archaea --db [mydatabase]
 kraken2-build --download-library bacteria --db [mydatabase]
 kraken2-build --download-library fungi --db [mydatabase]
 kraken2-build --download-library viral --db [mydatabase]
+
+# Build the database (takes time)
+kraken2-build --build --db [mydatabase]
 ```
 
 ## Initialise your sunbeam project
@@ -145,7 +148,7 @@ cat extensions/sbx_metaphlan/config.yml >> /path/to/my_project/sunbeam_config.ym
 cat extensions/sbx_eggnog/config.yml >> /path/to/my_project/sunbeam_config.yml
 ```
 
-In your project directory directory, a new config file and a new sample list were created (by default named sunbeam_config.yml and samplelist.csv, respectively). Edit the config file in your favorite text editor and samplelist.csv if necessary. You may want to check the paths to your project, databases, adapter sequences etc. An example of the sunbeam_config.yml is provided (here)[git].
+In your project directory directory, a new config file and a new sample list were created (by default named sunbeam_config.yml and samplelist.csv, respectively). Edit the config file in your favorite text editor and samplelist.csv if necessary. You may want to check the paths to your project, databases, adapter sequences etc. An example of the sunbeam_config.yml is provided [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/).
 
 ## Citation
 
