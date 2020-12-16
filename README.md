@@ -92,8 +92,6 @@ cat extensions/sbx_eggnog/config.yml >> /home/cpat0003/of33_scratch/Shotgun/MD4_
 
 All these databases are available on the cluster at `~/of33/Databases/shotgun`. If you need to re-build your own (at your own risks!) follow the instructions provided (here)[https://github.com/respiratory-immunology-lab/microbiome-shotgun/tree/master/databases].
 
-```
-
 ## Initialise your sunbeam project
 
 sunbeam init takes one required argument: a path to your project folder. This folder will be created if it doesn’t exist. You can also specify the path to your gzipped fastq files, and Sunbeam will try to guess how your samples are named, and whether they’re paired.
