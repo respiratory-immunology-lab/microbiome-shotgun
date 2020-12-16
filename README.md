@@ -28,7 +28,7 @@ module load [module]
 scancel [jobID]
 ```
 
-## Downloading ata from BaseSpace
+## Downloading data from BaseSpace
 
 See https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-overview for downloading data from BaseSpace straight to the cluster. 
 
