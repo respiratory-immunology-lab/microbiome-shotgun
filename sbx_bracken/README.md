@@ -1,5 +1,5 @@
 # sbx_bracken
-This is an extension to the [Sunbeam pipeline](https://github.com/sunbeam-labs/sunbeam) to run Bracken (Bayesian Reestimation of Abundance with KrakEN). Braken uses the taxonomy labels assigned by Kraken, a highly accurate metagenomics classification algorithm, to estimate the number of reads originating from each species present in a sample. See (Braken)[https://ccb.jhu.edu/software/bracken/index.shtml] for more information.
+This is an extension to the [Sunbeam pipeline](https://github.com/sunbeam-labs/sunbeam) to run Bracken (Bayesian Reestimation of Abundance with KrakEN). Braken uses the taxonomy labels assigned by Kraken, a highly accurate metagenomics classification algorithm, to estimate the number of reads originating from each species present in a sample. See [Braken](https://ccb.jhu.edu/software/bracken/index.shtml) for more information.
 
 ## Installing
 
