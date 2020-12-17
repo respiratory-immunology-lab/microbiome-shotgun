@@ -5,37 +5,7 @@ This pipeline is based on Sunbeam pipeline, which provides a foundation to build
 
 ## Working on the cluster
 
-Here we provide basic commands for connecting and submitting jobs on the cluster. See https://docs.massive.org.au/ for more information on the cluster.
-
-```
-# Connect to cluster
-ssh [username]@m3.massive.org.au # Mac users
-ssh -l [username] m3.massive.org.au # Linux users
-
-# Start a new smux session (n) for example with 20 cpus (--ntasks) for 1 day (--time)
-smux n --ntasks=20 --time=1-00:00:00
-
-# List ongoing smux sessions
-smux l
-
-# List ongoing jobs
-show_job
-
-# Load modules
-module load [module]
-
-# Cancel a smux session
-scancel [jobID]
-```
-
-## Downloading data from BaseSpace
-
-See https://developer.basespace.illumina.com/docs/content/documentation/cli/cli-overview for downloading data from BaseSpace straight to the cluster. 
-
-```
-# Download data from BaseSpace
-./bs -c Australia download project -i [projectID] -o [directory]
-```
+Click (here)[https://github.com/respiratory-immunology-lab/microbiome-shotgun/tree/master/cluster] for more information about how to work on the cluster and download data directly from basespace.
 
 ## Installing Sunbeam on the cluster
 
@@ -67,20 +37,9 @@ module load git
 source activate sunbeam
 cd sunbeam-stable
 
-# Kraken 2 extension
+# Kraken2 extension
 git clone https://github.com/louiejtaylor/sbx_kraken2 extensions/sbx_kraken2
 cat extensions/sbx_kraken2/config.yml >> /home/cpat0003/of33_scratch/Shotgun/MD4_project/sunbeam_config.yml
-
-# Subsample extension (for assembly)
-git clone https://github.com/sunbeam-labs/sbx_subsample/ extensions/sbx_subsample
-cat extensions/sbx_subsample/config.yml >> /home/cpat0003/of33_scratch/Shotgun/MD4_project/sunbeam_config.yml
-
-# eggNOG (functionnal annotation)
-git clone https://github.com/ArwaAbbas/sbx_eggnog/ extensions/sbx_eggnog
-cat extensions/sbx_eggnog/config.yml >> /home/cpat0003/of33_scratch/Shotgun/MD4_project/sunbeam_config.yml
-
-# sbx_humann
-...Coming soon...
 ```
 
 ## Databases
@@ -105,9 +64,6 @@ Because the default sunbeam_config.yml does not contain the extensions parameter
 
 ```
 cat extensions/sbx_kraken2/config.yml >> /path/to/my_project/sunbeam_config.yml
-cat extensions/sbx_subsample/config.yml >> /path/to/my_project/sunbeam_config.yml
-cat extensions/sbx_metaphlan/config.yml >> /path/to/my_project/sunbeam_config.yml
-cat extensions/sbx_eggnog/config.yml >> /path/to/my_project/sunbeam_config.yml
 ```
 
 In your project directory directory, a new config file and a new sample list were created (by default named sunbeam_config.yml and samplelist.csv, respectively). Edit the config file in your favorite text editor and samplelist.csv if necessary. You may want to check the paths to your project, databases, adapter sequences etc. An example of the sunbeam_config.yml is provided [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/).
