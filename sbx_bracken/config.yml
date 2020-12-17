@@ -1,0 +1,3 @@
+sbx_bracken:
+  threads: 4
+  db: ''
