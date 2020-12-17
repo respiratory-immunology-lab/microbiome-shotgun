@@ -1,0 +1,46 @@
+rule bracken_classify_report:
+    input:
+        expand(str(CLASSIFY_FP/'kraken2'/'{sample}-taxa.raw'), sample=Samples.keys())
+    output:
+        str(CLASSIFY_FP/'bracken'/'{sample}-bracken.tsv')
+    params:
+        db = Cfg["sbx_bracken"]["db"],
+        level = Cfg["sbx_bracken"]["level"]
+        length = Cfg["sbx_bracken"]["length"]
+    conda:
+        "sbx_bracken_env.yml"
+    shell:
+        """
+        mv 
+        bracken -d {params.db} \
+                -i {input} \
+                -o {output}
+                > {output.raw}
+        """
+
+rule bracken_biom:
+    input:
+        expand(str(CLASSIFY_FP/'kraken2'/'{sample}-taxa.raw'),
+               sample=Samples.keys())
+    output:
+        str(CLASSIFY_FP/'bracken'/'all_samples.biom')
+    shell:
+        """
+        kraken-biom --max D -o {output} {input}
+        """
+
+rule classic_k2_biom:
+    input:
+        str(CLASSIFY_FP/'bracken'/'all_samples.biom')
+    output:
+        str(CLASSIFY_FP/'bracken'/'all_samples.tsv')
+    shell:
+        """
+        biom convert -i {input} -o {output} \
+        --to-tsv --header-key=taxonomy --process-obs-metadata=taxonomy \
+        --output-metadata-id="Consensus Lineage"
+        """
+
+rule all_bracken:
+    input:
+        str(CLASSIFY_FP/'bracken'/'all_samples.tsv')
