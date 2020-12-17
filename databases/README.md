@@ -1,5 +1,12 @@
 # Databases building
 
+
+## Recommended smux parameters for database building
+
+```
+smux n --nodes=1 --ntasks=1 --cpuspertask=36 --mem=100000 -J Databases --time=5-00:00:00
+```
+
 ## Host genome(s)
 
 We need the host genomes to remove host reads before metagenomics analysis. Of note, these need to be located in a separate folder, be decompressed, and end up with `.fasta`. 
@@ -71,8 +78,3 @@ bash install_bracken.sh
 bracken-build -d [mydatabase] -t [numberofthreads] -x [directorywherekraken2isinstalled]
 ```
 
-## Recommended smux parameters
-
-```
-smux n --nodes=1 --ntasks=1 --cpuspertask=36 --mem=100000 -J Databases --time=5-00:00:00
-```
