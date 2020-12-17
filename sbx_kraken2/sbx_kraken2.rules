@@ -2,8 +2,8 @@ rule kraken2_classify_report:
     input:
         expand(str(QC_FP/'decontam'/'{{sample}}_{rp}.fastq.gz'),rp = Pairs)
     output:
-        raw = str(CLASSIFY_FP/'kraken2'/'raw'/'{sample}-raw.tsv'),
-        report = str(CLASSIFY_FP/'kraken2'/'{sample}-taxa.tsv')
+        raw = str(CLASSIFY_FP/'kraken2'/'raw'/'{sample}.kraken'),
+        report = str(CLASSIFY_FP/'kraken2'/'{sample}.kreport')
     params:
         db = Cfg["sbx_kraken2"]["db"],
         paired_end = "--paired" if Cfg['all']['paired_end'] else ""
@@ -22,7 +22,7 @@ rule kraken2_classify_report:
 
 rule kraken2_biom:
     input:
-        expand(str(CLASSIFY_FP/'kraken2'/'{sample}-taxa.tsv'),
+        expand(str(CLASSIFY_FP/'kraken2'/'{sample}.kreport'),
                sample=Samples.keys())
     output:
         str(CLASSIFY_FP/'kraken2'/'all_samples.biom')
