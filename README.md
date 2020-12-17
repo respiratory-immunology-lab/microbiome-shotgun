@@ -38,8 +38,12 @@ source activate sunbeam
 cd sunbeam-stable
 
 # Kraken2 extension
-git clone https://github.com/louiejtaylor/sbx_kraken2 extensions/sbx_kraken2
-cat extensions/sbx_kraken2/config.yml >> /home/cpat0003/of33_scratch/Shotgun/MD4_project/sunbeam_config.yml
+git clone https://github.com/respiratory-immunology-lab/microbiome-shotgun/tree/master/sbx_kraken2 extensions/sbx_kraken2
+cat extensions/sbx_kraken2/config.yml >> ~/sunbeam_config.yml
+
+# Braken extension
+git clone https://github.com/respiratory-immunology-lab/microbiome-shotgun/tree/master/sbx_braken extensions/sbx_braken
+cat extensions/sbx_braken/config.yml >> ~/sunbeam_config.yml
 ```
 
 ## Databases
