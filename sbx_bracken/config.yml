@@ -1,5 +1,5 @@
+
 sbx_bracken:
-  threads: 4
   db: ''
   read_length: 250
   level: 'S'
