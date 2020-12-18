@@ -5,7 +5,7 @@ This pipeline is based on Sunbeam pipeline, which provides a foundation to build
 
 ## Working on the cluster
 
-Click (here)[https://github.com/respiratory-immunology-lab/microbiome-shotgun/tree/master/cluster] for more information about how to work on the cluster and download data directly from basespace.
+Click [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/tree/master/cluster) for more information about how to work on the cluster and download data directly from basespace.
 
 ## Installing Sunbeam on the cluster
 
