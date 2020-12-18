@@ -53,7 +53,7 @@ cat extensions/sbx_braken/config.yml >> ~/sunbeam_config.yml
 3) Bracken databases (related to kraken2)
 4) Blast databases for nucleic acid (nt) and protein (nr) mapping
 
-All these databases are available on the cluster at `~/of33/Databases/shotgun`. If you need to re-build your own (at your own risks!) follow the instructions provided [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/tree/master/databases).
+All these databases are *available on the cluster* at `~/of33/Databases/shotgun`. Don't re-build your own unless absolutely necessary. If necessary, follow the instructions provided [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/tree/master/databases).
 
 ## Initialise your sunbeam project
 
