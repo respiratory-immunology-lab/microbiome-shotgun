@@ -1,6 +1,0 @@
-# Conda environment file for bracken
-channels:
-  - bioconda
-  - conda-forge
-dependencies:
-  - bracken
