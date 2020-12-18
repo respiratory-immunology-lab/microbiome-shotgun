@@ -17,7 +17,7 @@ wget http://ftp.ensembl.org/pub/release-98/fasta/mus_musculus/dna/Mus_musculus.G
 gunzip Mus_musculus.GRCm38.dna_sm.primary_assembly.fa.gz
 mv Mus_musculus.GRCm38.dna_sm.primary_assembly.fa Mus_musculus.GRCm38.dna_sm.primary_assembly.fasta
 
-p# Human
+# Human
 wget http://ftp.ensembl.org/pub/release-98/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa.gz
 gunzip Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa.gz
 mv Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa Homo_sapiens.GRCh38.dna_sm.primary_assembly.fasta
