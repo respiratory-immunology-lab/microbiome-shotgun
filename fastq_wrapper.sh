@@ -1,18 +1,19 @@
 #!/bin/bash
 
 # Create a new directory for the fastq files
-mkdir fastq
+mkdir rawfastq
 
 # Download data from basespace
-./bs -c Australia download project -i [projectnumber] -o rawfastq --extension=fastq.gz
+./bs -c Australia download project -i [projectnumber] -o basespace_output --extension=fastq.gz
 
 # Assuming we have the BaseSpace project downloaded in rawfastq directory
-find rawfastq -name "*.fastq.gz" -exec cp {} fastq \;
+find basespace_output -name "*.fastq.gz" -exec cp {} rawfastq \;
 
 # Remove initial folder to make space
-rm -rf rawfastq
+rm -rf basespace_output
 
 # Merge lanes 1 and 2
+cd rawfastq
 for f in *.fastq.gz
   do
   Basename=${f%_L00*}
