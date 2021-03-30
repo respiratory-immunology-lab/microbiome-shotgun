@@ -26,7 +26,6 @@ chmod u+w .git/objects/pack/*
 bash install.sh
 
 # Test the installation
-cd sunbeam-stable
 tests/run_tests.bash -e sunbeam
 ```
 
