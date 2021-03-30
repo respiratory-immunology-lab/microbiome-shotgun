@@ -4,7 +4,7 @@
 mkdir fastq
 
 # Download data from basespace
-./bs -c Australia download project -i [projectnumber] -o fastq --extension=fastq.gz
+./bs -c Australia download project -i [projectnumber] -o rawfastq --extension=fastq.gz
 
 # Assuming we have the BaseSpace project downloaded in rawfastq directory
 find rawfastq -name "*.fastq.gz" -exec cp {} fastq \;
