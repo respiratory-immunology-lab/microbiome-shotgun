@@ -83,4 +83,4 @@ In addition, you may cite the tools used by this pipeline:
 
 * Copyright (c) 2020 Respiratory Immunology lab, Monash University, Melbourne, Australia.
 * License: The R Notebook template (.Rmd) is provided under the MIT license (See LICENSE.txt for details)
-* Authors: C. Pattaroni, B.J. Marsland
+* Authors: C. Pattaroni
