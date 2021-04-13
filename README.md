@@ -71,6 +71,27 @@ cat extensions/sbx_kraken2/config.yml >> /path/to/my_project/sunbeam_config.yml
 
 In your project directory directory, a new config file and a new sample list were created (by default named sunbeam_config.yml and samplelist.csv, respectively). Edit the config file in your favorite text editor and samplelist.csv if necessary. You may want to check the paths to your project, databases, adapter sequences etc. An example of the sunbeam_config.yml is provided [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/).
 
+## Running sunbeam
+
+These are the parameters for using the `--partition=genomics --qos=genomics` partition on the cluster.
+
+```
+# Filtering and host sequences decontamination
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_decontam --account=of33 --time=02:00:00 --mem-per-cpu=30000 --cpus-per-task=10 --partition=genomics --qos=genomics" -j 40 -w 30 -p all_decontam
+
+# Classification with Kraken2
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_kraken2 --account=of33 --time=02:00:00 --mem-per-cpu=30000 --cpus-per-task=10 --partition=genomics --qos=genomics" -j 40 -w 30 -p --use-conda all_kraken2
+
+# Assembly with Megahit
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_assembly --account=of33 --time=02:00:00 --mem-per-cpu=30000 --cpus-per-task=10 --partition=genomics --qos=genomics" -j 20 -w 30 -p all_assembly
+
+# Annotation
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_annotate --account=of33 --time=02:00:00 --mem-per-cpu=30000 --cpus-per-task=10 --partition=genomics --qos=genomics" -j 1 -w 30 -p all_annotate
+
+# Functional annotation
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_eggnog_bac --account=of33 --time=02:00:00 --mem-per-cpu=30000 --cpus-per-task=10 --partition=genomics --qos=genomics" -j 20 -w 30 -p --use-conda all_eggnog_bac
+```
+
 ## Citation
 
 If you used this repository in a publication, please mention its url.
