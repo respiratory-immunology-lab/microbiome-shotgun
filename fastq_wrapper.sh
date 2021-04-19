@@ -33,5 +33,5 @@ rm -rf *L00*
 
 # Save files to Google Drive (make sure you it's configured for your account)
 module load rclone
-rclone copy rawfastq gdrive:/02_Data/Australia/NovaSeq
+rclone copy -v --fast-list --max-backlog=999999 --drive-chunk-size=512M rawfastq gdrive:/02_Data/Australia/NovaSeq
 
