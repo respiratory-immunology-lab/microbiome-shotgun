@@ -30,3 +30,8 @@ for f in *.fastq.gz
 
 # Remove individual files to make space
 rm -rf *L00*
+
+# Save files to Google Drive (make sure you it's configured for your account)
+module load rclone
+rclone copy rawfastq gdrive:/02_Data/Australia/NovaSeq
+
