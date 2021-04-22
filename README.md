@@ -69,7 +69,7 @@ Because the default sunbeam_config.yml does not contain the extensions parameter
 cat extensions/sbx_kraken2/config.yml >> /path/to/my_project/sunbeam_config.yml
 ```
 
-In your project directory directory, a new config file and a new sample list were created (by default named sunbeam_config.yml and samplelist.csv, respectively). Edit the config file in your favorite text editor and samplelist.csv if necessary. You may want to check the paths to your project, databases, adapter sequences etc. An example of the sunbeam_config.yml is provided [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/).
+In your project directory directory, a new config file and a new sample list were created (by default named sunbeam_config.yml and samplelist.csv, respectively). Edit the config file in your favorite text editor and samplelist.csv if necessary. You may want to check the paths to your project, databases, adapter sequences etc. An example of the sunbeam_config.yml is provided [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/sunbeam_config.yml).
 
 ## Running sunbeam
 
