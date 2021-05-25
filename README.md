@@ -12,7 +12,7 @@ Click [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/tr
 Sunbeam is a pipeline written in snakemake that simplifies and automates many of the steps in metagenomic sequencing analysis. See https://sunbeam.readthedocs.io/en/latest/index.html for more information.
 
 ```
-# Load git mocule on cluster
+# Load git module on cluster
 module load git
 
 # Clone sunbeam
@@ -32,10 +32,6 @@ tests/run_tests.bash -e sunbeam
 You will also need some extensions.
 
 ```
-module load git
-source activate sunbeam
-cd sunbeam-stable
-
 # Kraken2 extension
 git clone https://github.com/cpattaroni/sbx_kraken2 extensions/sbx_kraken2
 cat extensions/sbx_kraken2/config.yml >> ~/sunbeam_config.yml
