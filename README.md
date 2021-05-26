@@ -34,11 +34,11 @@ You will also need some extensions.
 ```
 # Kraken2 extension
 git clone https://github.com/cpattaroni/sbx_kraken2 extensions/sbx_kraken2
-cat extensions/sbx_kraken2/config.yml >> ~/sunbeam_config.yml
+cat extensions/sbx_kraken2/config.yml >> /path/to/my_project/sunbeam_config.yml
 
 # Braken extension
 git clone https://github.com/cpattaroni/sbx_bracken extensions/sbx_braken
-cat extensions/sbx_braken/config.yml >> ~/sunbeam_config.yml
+cat extensions/sbx_braken/config.yml >> /path/to/my_project/sunbeam_config.yml
 ```
 
 ## Databases
@@ -73,19 +73,19 @@ These are the parameters for using the `--partition=genomics --qos=genomics` par
 
 ```
 # Filtering and host sequences decontamination
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_decontam --account=of33 --time=02:00:00 --mem-per-cpu=30000 --ntasks=36 --partition=genomics --qos=genomics" -j 40 -w 30 -p all_decontam
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_decontam --account=of33 --time=02:00:00 --mem-per-cpu=30000 --ntasks=24 --partition=genomics --qos=genomics" -j 48 -w 30 -p all_decontam
 
 # Classification with Kraken2
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_kraken2 --account=of33 --time=02:00:00 --mem-per-cpu=30000 --ntasks=36 --partition=genomics --qos=genomics" -j 40 -w 30 -p --use-conda all_kraken2
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_kraken2 --account=of33 --time=02:00:00 --mem-per-cpu=30000 --ntasks=24 --partition=genomics --qos=genomics" -j 48 -w 30 -p --use-conda all_kraken2
 
 # Assembly with Megahit
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_assembly --account=of33 --time=02:00:00 --mem-per-cpu=30000 --ntasks=36 --partition=genomics --qos=genomics" -j 20 -w 30 -p all_assembly
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_assembly --account=of33 --time=02:00:00 --mem-per-cpu=30000 --ntasks=24 --partition=genomics --qos=genomics" -j 48 -w 30 -p all_assembly
 
 # Annotation
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_annotate --account=of33 --time=02:00:00 --mem-per-cpu=30000 --ntasks=36 --partition=genomics --qos=genomics" -j 1 -w 30 -p all_annotate
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_annotate --account=of33 --time=02:00:00 --mem-per-cpu=30000 --ntasks=24 --partition=genomics --qos=genomics" -j 48 -w 30 -p all_annotate
 
 # Functional annotation
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_eggnog_bac --account=of33 --time=02:00:00 --mem-per-cpu=30000 --ntasks=36 --partition=genomics --qos=genomics" -j 20 -w 30 -p --use-conda all_eggnog_bac
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=all_eggnog_bac --account=of33 --time=02:00:00 --mem-per-cpu=30000 --ntasks=24 --partition=genomics --qos=genomics" -j 48 -w 30 -p --use-conda all_eggnog_bac
 ```
 
 ## Citation
@@ -98,6 +98,6 @@ In addition, you may cite the tools used by this pipeline:
 
 ## Rights
 
-* Copyright (c) 2020 Respiratory Immunology lab, Monash University, Melbourne, Australia.
+* Copyright (c) 2021 Respiratory Immunology lab, Monash University, Melbourne, Australia.
 * License: The R Notebook template (.Rmd) is provided under the MIT license (See LICENSE.txt for details)
 * Authors: C. Pattaroni
