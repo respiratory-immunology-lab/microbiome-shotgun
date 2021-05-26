@@ -29,7 +29,7 @@ all:
 qc:
   suffix: qc
   # Trimmomatic
-  threads: 24
+  threads: 12
   java_heapsize: 512M
   leading: 3
   trailing: 3
@@ -49,14 +49,14 @@ qc:
 # Taxonomic classifications
 classify:
   suffix: classify
-  threads: 24
+  threads: 12
   kraken_db_fp: ''
 
 # Contig assembly
 assembly:
   suffix: assembly
   min_length: 300
-  threads: 24
+  threads: 12
 
 # Contig annotation
 annotation:
@@ -67,7 +67,7 @@ annotation:
   circular_min_len: 1000
 
 blast:
-  threads: 24
+  threads: 12
 
 blastdbs:
   root_fp: ''
@@ -76,12 +76,12 @@ mapping:
   suffix: mapping
   genomes_fp: ''
   samtools_opts: ''
-  threads: 24
+  threads: 12
 
 download:
   suffix: download
-  threads: 24
+  threads: 12
 
 sbx_kraken2:
-  threads: 24
+  threads: 12
   db: /home/cpat0003/of33/Databases/shotgun/kraken/Kraken20201214
