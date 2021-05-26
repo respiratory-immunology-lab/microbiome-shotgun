@@ -29,7 +29,7 @@ all:
 qc:
   suffix: qc
   # Trimmomatic
-  threads: 36
+  threads: 24
   java_heapsize: 512M
   leading: 3
   trailing: 3
@@ -44,19 +44,19 @@ qc:
   # Decontam.py
   pct_id: 0.8
   frac: 0.5
-  host_fp: /home/cpat0003/of33/Databases/shotgun/host/human
+  host_fp: /home/cpat0003/of33/Databases/shotgun/host/human/sunbeam
 
 # Taxonomic classifications
 classify:
   suffix: classify
-  threads: 36
+  threads: 24
   kraken_db_fp: ''
 
 # Contig assembly
 assembly:
   suffix: assembly
   min_length: 300
-  threads: 36
+  threads: 24
 
 # Contig annotation
 annotation:
@@ -67,7 +67,7 @@ annotation:
   circular_min_len: 1000
 
 blast:
-  threads: 36
+  threads: 24
 
 blastdbs:
   root_fp: ''
@@ -76,12 +76,12 @@ mapping:
   suffix: mapping
   genomes_fp: ''
   samtools_opts: ''
-  threads: 36
+  threads: 24
 
 download:
   suffix: download
-  threads: 36
+  threads: 24
 
 sbx_kraken2:
-  threads: 36
+  threads: 24
   db: /home/cpat0003/of33/Databases/shotgun/kraken/Kraken20201214
