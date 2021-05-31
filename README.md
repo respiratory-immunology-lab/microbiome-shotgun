@@ -73,16 +73,16 @@ These are the parameters for using the `--partition=genomics --qos=genomics` par
 
 ```
 # Filtering and host sequences decontamination
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_decontam --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=12 --partition=genomics --qos=genomics" -j 20 -w 30 -p all_decontam
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_decontam --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=12 --partition=genomics --qos=genomics" -j 25 -w 30 -p all_decontam
 
 # Classification with Kraken2
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_kraken2 --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=12 --partition=genomics --qos=genomics" -j 20 -w 30 -p --use-conda all_kraken2
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_kraken2 --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=12 --partition=genomics --qos=genomics" -j 25 -w 30 -p --use-conda all_kraken2
 
 # Assembly with Megahit
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_assembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=12 --partition=genomics --qos=genomics" -j 20 -w 30 -p all_assembly
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_assembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=12 --partition=genomics --qos=genomics" -j 25 -w 30 -p all_assembly
 
 # Annotation
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_annotate --account=of33 --time=2-00:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=12" -j 20 -w 30 -p all_annotate
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_annotate --account=of33 --time=3-00:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=12" -j 25 -w 30 -p all_annotate
 
 # Functional annotation
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_eggnog_bac --account=of33 --time=04:00:00 --ntasks=1 --mem-per-cpu=8G --cpus-per-task=12 --partition=genomics --qos=genomics" -j 20 -w 30 -p --use-conda all_eggnog_bac
