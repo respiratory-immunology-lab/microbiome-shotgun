@@ -31,15 +31,31 @@ module load blast
 
 # Nt database
 wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz
-gunzip nt.gz
+gunzip -d nt.gz
 makeblastdb -in nt -out nt -dbtype nucl
 
 # Nr database
 wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz
-gunzip nr.gz
+gunzip -d nr.gz
 makeblastdb -in nr -out nr -dbtype prot
 ```
 
+## Blast database of virulence factors
+
+```
+# Load blast
+module load blast
+
+# Nt database
+wget http://www.mgc.ac.cn/VFs/Down/VFDB_setB_nt.fas.gz
+gunzip -d VFDB_setB_nt.fas.gz
+makeblastdb -in VFDB_setB_nt.fas -out VFDB_setB_nt -dbtype nucl
+
+# Nr database
+wget http://www.mgc.ac.cn/VFs/Down/VFDB_setB_pro.fas.gz
+gunzip -d VFDB_setB_pro.fas.gz
+
+```
 ## Kraken databases for taxonomy
 
 There are some small pre-compiled databases available. However, because we want to go in more depth and are interested in fungi as well we will build our own.
