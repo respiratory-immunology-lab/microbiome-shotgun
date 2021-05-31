@@ -54,7 +54,7 @@ makeblastdb -in VFDB_setB_nt.fas -out VFDB_setB_nt -dbtype nucl
 # Nr database
 wget http://www.mgc.ac.cn/VFs/Down/VFDB_setB_pro.fas.gz
 gunzip -d VFDB_setB_pro.fas.gz
-
+makeblastdb -in VFDB_setB_pro.fas.gz -out VFDB_setB_pro -dbtype prot
 ```
 ## Kraken databases for taxonomy
 
