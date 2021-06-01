@@ -82,7 +82,7 @@ sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_assembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=12 --partition=genomics --qos=genomics" -j 25 -w 30 -p all_assembly
 
 # Annotation
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_annotate --account=of33 --time=4-00:00:00 --mem-per-cpu=12G --ntasks=1 --cpus-per-task=6" -j 50 -w 30 -p all_annotate
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_annotate --account=of33 --time=4-00:00:00 --mem-per-cpu=4G --ntasks=1 --cpus-per-task=24" -j 50 -w 30 -p all_annotate
 
 # Functional annotation
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_eggnog_bac --account=of33 --time=04:00:00 --ntasks=1 --mem-per-cpu=8G --cpus-per-task=12 --partition=genomics --qos=genomics" -j 20 -w 30 -p --use-conda all_eggnog_bac
