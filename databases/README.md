@@ -9,18 +9,18 @@ smux n --nodes=1 --ntasks=1 --cpuspertask=36 --mem=100000 -J Databases --time=5-
 
 ## Host genome(s)
 
-We need the host genomes to remove host reads before metagenomics analysis. Of note, these need to be located in a separate folder, be decompressed, and end up with `.fasta`. 
+We need the host genomes to remove host reads before metagenomics analysis. Of note, these need to be located in a separate folder, be decompressed, and end up with `.fasta`. For human data, the best is to use a decoy version of the genome.
 
 ```
 # Mouse
 wget http://ftp.ensembl.org/pub/release-98/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna_sm.primary_assembly.fa.gz
-gunzip Mus_musculus.GRCm38.dna_sm.primary_assembly.fa.gz
+gunzip -d Mus_musculus.GRCm38.dna_sm.primary_assembly.fa.gz
 mv Mus_musculus.GRCm38.dna_sm.primary_assembly.fa Mus_musculus.GRCm38.dna_sm.primary_assembly.fasta
 
 # Human
-wget http://ftp.ensembl.org/pub/release-98/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa.gz
-gunzip Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa.gz
-mv Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa Homo_sapiens.GRCh38.dna_sm.primary_assembly.fasta
+wget http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa
+gunzip -d GRCh38_full_analysis_set_plus_decoy_hla.fa
+mv GRCh38_full_analysis_set_plus_decoy_hla.fa GRCh38_full_analysis_set_plus_decoy_hla.fasta
 ```
 
 ## Blast databases for nucleic acid (nt) and protein (nr) mapping module load blast
