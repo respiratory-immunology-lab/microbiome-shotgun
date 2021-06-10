@@ -18,7 +18,7 @@
 
 # General options
 all:
-  root: /fs03/of33/Celine/Shotgun/AsthmaMultiOmics
+  root: /home/cpat0003/of33_scratch/Celine/Shotgun/Sunbeam
   output_fp: sunbeam_output
   samplelist_fp: samples.csv
   paired_end: true
@@ -44,7 +44,7 @@ qc:
   # Decontam.py
   pct_id: 0.8
   frac: 0.5
-  host_fp: /home/cpat0003/of33/Databases/shotgun/host/human/sunbeam
+  host_fp: /home/cpat0003/of33/Databases/shotgun/host/human/sunbeam/metagenome
 
 # Taxonomic classifications
 classify:
@@ -55,23 +55,28 @@ classify:
 # Contig assembly
 assembly:
   suffix: assembly
-  min_length: 300
+  min_length: 125
   threads: 12
 
 # Contig annotation
 annotation:
   suffix: annotation
-  min_contig_len: 300
+  min_contig_len: 125
   circular_kmin: 5
   circular_kmax: 500
   circular_min_len: 1000
 
 blast:
-  threads: 12
+  threads: 6
 
 blastdbs:
-  root_fp: ''
-
+  root_fp: /home/cpat0003/of33/Databases/shotgun
+  nucleotide:
+    nt: nucleotide/nt20201214
+    ntvir: /home/cpat0003/of33/Databases/shotgun/nucleotide/virulence
+  protein:
+    nr: protein/nr20201214
+    
 mapping:
   suffix: mapping
   genomes_fp: ''
