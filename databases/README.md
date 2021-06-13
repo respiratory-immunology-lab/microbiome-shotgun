@@ -13,12 +13,12 @@ We need the host genomes to remove host reads before metagenomics analysis. Of n
 
 ```
 # Mouse
-wget http://ftp.ensembl.org/pub/release-98/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna_sm.primary_assembly.fa.gz
+wget -c http://ftp.ensembl.org/pub/release-98/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna_sm.primary_assembly.fa.gz
 gzip -d Mus_musculus.GRCm38.dna_sm.primary_assembly.fa.gz
 mv Mus_musculus.GRCm38.dna_sm.primary_assembly.fa Mus_musculus.GRCm38.dna_sm.primary_assembly.fasta
 
 # Human
-wget http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/phase2_re                                                ference_assembly_sequence/hs37d5.fa.gz
+wget -c http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/phase2_re                                                ference_assembly_sequence/hs37d5.fa.gz
 gzip -d hs37d5.fa.gz
 mv hs37d5.fa hs37d5.fasta
 ```
@@ -29,9 +29,9 @@ rRNA and tRNA files can be found [here](https://github.com/elfrouin/transcriptM/
 
 ```
 # Human transcriptome files
-wget http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/cds/Homo_sapiens.GRCh38.cds.all.fa.gz
+wget -c http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/cds/Homo_sapiens.GRCh38.cds.all.fa.gz
 gzip -d Homo_sapiens.GRCh38.cds.all.fa.gz
-wget http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/ncrna/Homo_sapiens.GRCh38.ncrna.fa.gz
+wget -c http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/ncrna/Homo_sapiens.GRCh38.ncrna.fa.gz
 gzip -d Homo_sapiens.GRCh38.ncrna.fa.gz
 
 # Other eucaryotic and procaryotic files can be found in the link above
@@ -44,12 +44,12 @@ gzip -d Homo_sapiens.GRCh38.ncrna.fa.gz
 source activate sunbeam
 
 # Nt database
-wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz
+wget -c ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz
 gunzip -d nt.gz
 makeblastdb -in nt -out nt -dbtype nucl
 
 # Nr database
-wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz
+wget -c ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz
 gunzip -d nr.gz
 makeblastdb -in nr -out nr -dbtype prot
 ```
@@ -61,14 +61,14 @@ makeblastdb -in nr -out nr -dbtype prot
 source activate sunbeam
 
 # Nt database
-wget http://www.mgc.ac.cn/VFs/Down/VFDB_setB_nt.fas.gz
+wget -c http://www.mgc.ac.cn/VFs/Down/VFDB_setB_nt.fas.gz
 gunzip -d VFDB_setB_nt.fas.gz
 makeblastdb -in VFDB_setB_nt.fas -out VFDB_setB_nt -dbtype nucl
 
 # Nr database
-wget http://www.mgc.ac.cn/VFs/Down/VFDB_setB_pro.fas.gz
+wget -c http://www.mgc.ac.cn/VFs/Down/VFDB_setB_pro.fas.gz
 gunzip -d VFDB_setB_pro.fas.gz
-makeblastdb -in VFDB_setB_pro.fas.gz -out VFDB_setB_pro -dbtype prot
+makeblastdb -in VFDB_setB_pro.fas -out VFDB_setB_pro -dbtype prot
 ```
 
 ## Kraken databases for taxonomy
