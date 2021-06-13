@@ -4,7 +4,7 @@
 ## Recommended smux parameters for database building
 
 ```
-smux n --nodes=1 --ntasks=1 --cpuspertask=36 --mem=100000 -J Databases --time=5-00:00:00
+smux n --nodes=1 --ntasks=1 --mem=10G -J Databases --time=7-00:00:00
 ```
 
 ## Host genome(s)
@@ -40,8 +40,8 @@ gzip -d Homo_sapiens.GRCh38.ncrna.fa.gz
 ## Blast databases for nucleic acid (nt) and protein (nr) mapping module load blast
 
 ```
-# Load blast
-module load blast
+# Activate sunbeam
+source activate sunbeam
 
 # Nt database
 wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz
@@ -57,8 +57,8 @@ makeblastdb -in nr -out nr -dbtype prot
 ## Blast database of virulence factors (optional)
 
 ```
-# Load blast
-module load blast
+# Activate sunbeam
+source activate sunbeam
 
 # Nt database
 wget http://www.mgc.ac.cn/VFs/Down/VFDB_setB_nt.fas.gz
