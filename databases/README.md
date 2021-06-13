@@ -88,13 +88,13 @@ kraken2-build --download-taxonomy --db [mydatabase]
 module load blast
 
 # Download reference libraries
-kraken2-build --download-library archaea --db [mydatabase]
-kraken2-build --download-library bacteria --db [mydatabase]
-kraken2-build --download-library fungi --db [mydatabase]
-kraken2-build --download-library viral --db [mydatabase]
+~/kraken2/kraken2-build --download-library archaea --db [mydatabase]
+~/kraken2/kraken2-build --download-library bacteria --db [mydatabase]
+~/kraken2/kraken2-build --download-library fungi --db [mydatabase]
+~/kraken2/kraken2-build --download-library viral --db [mydatabase]
 
 # Build the database (takes time)
-kraken2-build --build --db [mydatabase]
+~/kraken2/kraken2-build --build --db [mydatabase]
 ```
 
 ## Braken for corrected species abundances
