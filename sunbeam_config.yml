@@ -18,7 +18,7 @@
 
 # General options
 all:
-  root: /home/cpat0003/of33_scratch/Celine/Shotgun/Sunbeam
+  root:
   output_fp: sunbeam_output
   samplelist_fp: samples.csv
   paired_end: true
@@ -29,7 +29,7 @@ all:
 qc:
   suffix: qc
   # Trimmomatic
-  threads: 12
+  threads: 16
   java_heapsize: 512M
   leading: 3
   trailing: 3
@@ -40,23 +40,23 @@ qc:
   fwd_adapters: [GTTTCCCAGTCACGATC, GTTTCCCAGTCACGATCNNNNNNNNNGTTTCCCAGTCACGATC]
   rev_adapters: [GTTTCCCAGTCACGATC, GTTTCCCAGTCACGATCNNNNNNNNNGTTTCCCAGTCACGATC]
   # Komplexity
-  kz_threshold: 0.55
+  kz_threshold: 0.25
   # Decontam.py
-  pct_id: 0.8
-  frac: 0.5
+  pct_id: 0.5
+  frac: 0.6
   host_fp: /home/cpat0003/of33/Databases/shotgun/host/human/sunbeam/metagenome
 
 # Taxonomic classifications
 classify:
   suffix: classify
-  threads: 12
+  threads: 16
   kraken_db_fp: ''
 
 # Contig assembly
 assembly:
   suffix: assembly
   min_length: 125
-  threads: 12
+  threads: 16
 
 # Contig annotation
 annotation:
@@ -72,21 +72,22 @@ blast:
 blastdbs:
   root_fp: /home/cpat0003/of33/Databases/shotgun
   nucleotide:
-    nt: nucleotide/nt20201214
-    ntvir: /home/cpat0003/of33/Databases/shotgun/nucleotide/virulence
+    nt: nucleotide/nt20210613
+    ntvir: nucleotide/virulence
   protein:
-    nr: protein/nr20201214
-    
+    nr: protein/nr20210613
+    nrvir: protein/virulence
+
 mapping:
   suffix: mapping
   genomes_fp: ''
   samtools_opts: ''
-  threads: 12
+  threads: 16
 
 download:
   suffix: download
-  threads: 12
+  threads: 16
 
 sbx_kraken2:
-  threads: 12
-  db: /home/cpat0003/of33/Databases/shotgun/kraken/Kraken20201214
+  threads: 16
+  db: /home/cpat0003/of33/Databases/shotgun/kraken/kraken20210613
