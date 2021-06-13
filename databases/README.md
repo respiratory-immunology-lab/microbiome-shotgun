@@ -82,7 +82,7 @@ cd [mydirectory]
 bash install_kraken2.sh
 
 # Install the taxonomy
-kraken2-build --download-taxonomy --db [mydatabase]
+~/kraken2/kraken2-build --download-taxonomy --db [mydatabase]
 
 # Load blast module (for low complexity sequences masking)
 module load blast
