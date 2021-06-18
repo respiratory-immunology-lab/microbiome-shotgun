@@ -82,7 +82,10 @@ sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_assembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 200 -w 60 -p all_assembly
 
 # Co-assembly with Megahit
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_assembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 200 -w 60 -p --use-conda all_coassemble
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_coassembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 200 -w 60 -p --use-conda all_coassemble
+
+# Contigs database with anvio
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_anvio_contigs --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 200 -w 60 -p --use-conda all_anvio_contigs
 
 # Annotation
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_annotate --account=of33 --time=7-00:00:00 --mem-per-cpu=12G --nodes=1 --ntasks=1 --cpus-per-task=6" -j 200 -w 60 -p all_annotate
