@@ -76,7 +76,7 @@ These are the parameters for using the `--partition=genomics --qos=genomics` par
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_decontam --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 200 -w 60 -p all_decontam
 
 # Classification with Kraken2
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_kraken2 --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 200 -w 60 -p --use-conda all_kraken2
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_kraken2 --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 200 -w 60 -p --use-conda all_kraken2bracken
 
 # Assembly with Megahit
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_assembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 200 -w 60 -p all_assembly
