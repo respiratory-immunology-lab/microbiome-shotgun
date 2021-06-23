@@ -75,8 +75,8 @@ These are the parameters for using the `--partition=genomics --qos=genomics` par
 # Filtering and host sequences decontamination
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_decontam --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 200 -w 60 -p all_decontam
 
-# Classification with Kraken2
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_kraken2 --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 200 -w 60 -p --use-conda all_kraken2bracken
+# Classification with Kraken2 and Bracken correction
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_kraken2bracken](url) --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 200 -w 60 -p --use-conda all_kraken2bracken
 
 # Assembly with Megahit
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_assembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 200 -w 60 -p all_assembly
@@ -87,11 +87,8 @@ sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam
 # Contigs database with anvio
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_anvio_contigs --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 200 -w 60 -p --use-conda all_anvio_contigs
 
-# Annotation
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_annotate --account=of33 --time=7-00:00:00 --mem-per-cpu=12G --nodes=1 --ntasks=1 --cpus-per-task=6" -j 200 -w 60 -p all_annotate
-
-# Functional annotation
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_eggnog_bac --account=of33 --time=04:00:00 --ntasks=1 --mem-per-cpu=8G --cpus-per-task=16 --partition=genomics --qos=genomics" -j 200 -w 60 -p --use-conda all_eggnog_bac
+# Antibiotics resistance genes with deepARG
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_deepARG --account=of33 --time=04:00:00 --mem-per-cpu=12G --ntasks=1 --cpus-per-task=1 --partition=genomics --qos=genomics" -j 200 -w 60 -p --use-conda all_deepARG
 ```
 
 ## Citation
