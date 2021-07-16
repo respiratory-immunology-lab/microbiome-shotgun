@@ -18,7 +18,7 @@
 
 # General options
 all:
-  root:
+  root: /projects/of33/Celine/MetaGenomics
   output_fp: sunbeam_output
   samplelist_fp: samples.csv
   paired_end: true
@@ -40,7 +40,7 @@ qc:
   fwd_adapters: [GTTTCCCAGTCACGATC, GTTTCCCAGTCACGATCNNNNNNNNNGTTTCCCAGTCACGATC]
   rev_adapters: [GTTTCCCAGTCACGATC, GTTTCCCAGTCACGATCNNNNNNNNNGTTTCCCAGTCACGATC]
   # Komplexity
-  kz_threshold: 0.25
+  kz_threshold: 0.55
   # Decontam.py
   pct_id: 0.5
   frac: 0.6
@@ -55,13 +55,13 @@ classify:
 # Contig assembly
 assembly:
   suffix: assembly
-  min_length: 125
+  min_length: 100
   threads: 16
 
 # Contig annotation
 annotation:
   suffix: annotation
-  min_contig_len: 125
+  min_contig_len: 100
   circular_kmin: 5
   circular_kmax: 500
   circular_min_len: 1000
@@ -72,10 +72,10 @@ blast:
 blastdbs:
   root_fp: /home/cpat0003/of33/Databases/shotgun
   nucleotide:
-    nt: nucleotide/nt20210613
-    ntvir: nucleotide/virulence
+    nt: ''
+    ntvir: ''
   protein:
-    nr: protein/nr20210613
+    #nr: protein/nr20210613
     nrvir: protein/virulence
 
 mapping:
@@ -88,6 +88,20 @@ download:
   suffix: download
   threads: 16
 
-sbx_kraken2:
+sbx_kraken2bracken:
   threads: 16
   db: /home/cpat0003/of33/Databases/shotgun/kraken/kraken20210613
+  read_length: 250
+
+sbx_coassembly:
+  threads: 16
+  group_file: ''
+
+sbx_anvio:
+  threads: 16
+  min_len: 1000
+  pfam_dir: /home/cpat0003/of33/Databases/shotgun/anvio
+  kaiju_dir: /home/cpat0003/of33/Databases/shotgun/kaiju
+
+sbx_deepARG:
+  deepARG_dir: /home/cpat0003/of33/Databases/shotgun/deepARG
