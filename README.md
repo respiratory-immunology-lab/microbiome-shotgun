@@ -29,16 +29,12 @@ bash install.sh
 tests/run_tests.bash -e sunbeam
 ```
 
-You will also need some extensions.
+You will also need some extensions (in the `extensions` folder of sunbeam).
 
 ```
-# Kraken2 extension
-git clone https://github.com/cpattaroni/sbx_kraken2 extensions/sbx_kraken2
+# Kraken3bracken extension
+git clone https://github.com/respiratory-immunology-lab/sbx_kraken2bracken
 cat extensions/sbx_kraken2/config.yml >> /path/to/my_project/sunbeam_config.yml
-
-# Braken extension
-git clone https://github.com/cpattaroni/sbx_bracken extensions/sbx_braken
-cat extensions/sbx_braken/config.yml >> /path/to/my_project/sunbeam_config.yml
 ```
 
 ## Databases
@@ -56,7 +52,7 @@ sunbeam init takes one required argument: a path to your project folder. This fo
 
 ```
 source activate sunbeam
-sunbeam init --data_fp [/path/to/fastq/files /path/to/my_project]
+sunbeam init --data_fp /path/to/fastq/files /path/to/my_project
 ```
 
 Because the default sunbeam_config.yml does not contain the extensions parameters, update it by running:
