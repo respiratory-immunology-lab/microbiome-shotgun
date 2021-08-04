@@ -75,7 +75,7 @@ sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam
 # Metagenomics
 for f in sunbeam_output/qc/log/decontam/*_1.txt; do Basename=${f%_1*}; Sample=${Basename#*/*/*/*/*}; Host=$(cut -f2 ${f} | tail -1); echo $Sample$'\t'$Host$; done > sunbeam_output/qc/host_counts.tsv
 # Metatranscriptomics
-for f in sunbeam_output/qc/log/decontam/*_1.txt; do Basename=${f%_1*}; Sample=${Basename#*/*/*/*/*}; Host=$(cut -f20 ${f} | tail -1); echo $Sample$'\t'$Host; done > sunbeam_output/qc/host_counts.tsv
+for f in sunbeam_output/qc/log/decontam/*_1.txt; do Basename=${f%_1*}; Sample=${Basename#*/*/*/*/*}; Host=$(cut -f15 ${f} | tail -1); echo $Sample$'\t'$Host; done > sunbeam_output/qc/host_counts.tsv
 
 # Classification with Kraken2 and Bracken correction
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_kraken2bracken --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 15 -w 60 -p --use-conda all_kraken2bracken
