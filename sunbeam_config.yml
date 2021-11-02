@@ -55,28 +55,26 @@ classify:
 # Contig assembly
 assembly:
   suffix: assembly
-  min_length: 100
+  min_length: 500
   threads: 16
 
 # Contig annotation
 annotation:
   suffix: annotation
-  min_contig_len: 100
+  min_contig_len: 500
   circular_kmin: 5
   circular_kmax: 500
   circular_min_len: 1000
 
 blast:
-  threads: 6
+  threads: 16
 
 blastdbs:
-  root_fp: /home/cpat0003/of33/Databases/shotgun
+  root_fp: /home/cpat0003/of33/Databases/shotgun/blast
   nucleotide:
-    nt: ''
-    ntvir: ''
+    nt: nt_20211102
   protein:
-    #nr: protein/nr20210613
-    nrvir: protein/virulence
+    nr: nr_20211102
 
 mapping:
   suffix: mapping
