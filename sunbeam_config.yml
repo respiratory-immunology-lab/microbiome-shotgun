@@ -55,16 +55,16 @@ classify:
 # Contig assembly
 assembly:
   suffix: assembly
-  min_length: 500
+  min_length: 400
   threads: 16
 
-# Contig annotation
+# Annotation
 annotation:
   suffix: annotation
-  min_contig_len: 500
-  circular_kmin: 5
-  circular_kmax: 500
-  circular_min_len: 1000
+  min_contig_len: 400
+  circular_kmin: 10
+  circular_kmax: 1000
+  circular_min_len: 3500
 
 blast:
   threads: 16
