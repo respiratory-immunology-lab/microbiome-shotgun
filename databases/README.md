@@ -81,7 +81,7 @@ makeblastdb -in VFDB_setB_nt.fas -title VFDBnucl -dbtype nucl -hash_index
 # Virulence factors database
 wget -c http://www.mgc.ac.cn/VFs/Down/VFDB_setB_pro.fas.gz
 gunzip -d VFDB_setB_pro.fas.gz
-makeblastdb -in VFDB_setB_prot.fas -title VFDBprotein -dbtype prot -hash_index
+makeblastdb -in VFDB_setB_pro.fas -title VFDBprotein -dbtype prot -hash_index
 ```
 
 ## Kraken databases for taxonomy
