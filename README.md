@@ -83,17 +83,14 @@ sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam
 # Assembly with Megahit
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_assembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 15 -w 60 -p all_assembly
 
-# Annotation with blast
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_annotate --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 15 -w 60 -p all_annotate
+# Annotation with Blast (usually > walltime)
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_annotate --account=of33 --time=1-00:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16" -j 15 -w 60 -p all_annotate
 
 # Co-assembly with Megahit
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_coassembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 15 -w 60 -p --use-conda all_coassemble
 
 # Contigs database with anvio
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_anvio_contigs --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 15 -w 60 -p --use-conda all_anvio_contigs
-
-# Antibiotics resistance genes with deepARG
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_deepARG --account=of33 --time=04:00:00 --mem-per-cpu=12G --ntasks=1 --cpus-per-task=1 --partition=genomics --qos=genomics" -j 15 -w 60 -p --use-conda all_deepARG
 ```
 
 ## Citation
