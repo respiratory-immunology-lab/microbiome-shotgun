@@ -67,7 +67,7 @@ makeblastdb -in protein_fasta_protein_homolog_model.fasta -title card_protein -d
 makeblastdb -in nucleotide_fasta_protein_homolog_model.fasta -title card_nucl -dbtype nucl -hash_index
 ```
 
-## Blast database of virulence factors (optional)
+## Virulence factor database (optional)
 
 ```
 # Activate sunbeam
