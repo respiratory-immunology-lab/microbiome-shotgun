@@ -84,7 +84,7 @@ sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_assembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 15 -w 60 -p all_assembly
 
 # Annotation with Blast (usually > walltime)
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_annotate --account=of33 --time=04:00:00 --mem-per-cpu=12G --ntasks=1 --cpus-per-task=36 --partition=genomics --qos=genomics" -j 15 -w 60 -p all_annotate
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_annotate --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=36 --partition=genomics --qos=genomics" -j 15 -w 60 -p all_annotate
 
 # Co-assembly with Megahit
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_coassembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 15 -w 60 -p --use-conda all_coassemble
