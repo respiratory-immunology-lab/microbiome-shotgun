@@ -54,7 +54,7 @@ gunzip -d nr.gz
 makeblastdb -in nr -out nr -dbtype prot
 ```
 
-## CARD database for resistance genes
+## CARD database for resistance genes (optional)
 
 ```
 # Activate sunbeam
@@ -63,7 +63,8 @@ source activate sunbeam
 # Create database
 curl -o broadstreet-v3.1.4.tar.bz2 https://card.mcmaster.ca/download/0/broadstreet-v3.1.4.tar.bz2
 tar -xf broadstreet-v3.1.4.tar.bz2
-makeblastdb -in protein_fasta_protein_homolog_model.fasta  -out card_ -dbtype prot
+makeblastdb -in protein_fasta_protein_homolog_model.fasta -title card_protein -dbtype prot -hash_index
+makeblastdb -in nucleotide_fasta_protein_homolog_model.fasta -title card_nucl -dbtype nucl -hash_index
 ```
 
 ## Blast database of virulence factors (optional)
@@ -75,12 +76,12 @@ source activate sunbeam
 # Virulence factors database
 wget -c http://www.mgc.ac.cn/VFs/Down/VFDB_setB_nt.fas.gz
 gunzip -d VFDB_setB_nt.fas.gz
-makeblastdb -in VFDB_setB_nt.fas -out VFDB_setB_nt -dbtype nucl
+makeblastdb -in VFDB_setB_nt.fas -title VFDBnucl -dbtype nucl -hash_index
 
 # Virulence factors database
 wget -c http://www.mgc.ac.cn/VFs/Down/VFDB_setB_pro.fas.gz
 gunzip -d VFDB_setB_pro.fas.gz
-makeblastdb -in VFDB_setB_pro.fas -out VFDB_setB_pro -dbtype prot
+makeblastdb -in VFDB_setB_prot.fas -title VFDBprotein -dbtype prot -hash_index
 ```
 
 ## Kraken databases for taxonomy
