@@ -78,7 +78,7 @@ gunzip -d VFDB_setB_nt.fas.gz
 makeblastdb -in VFDB_setB_nt.fas -out VFDB_setB_nt -dbtype nucl
 
 # Virulence factors database
-wget -c http://www.mgc.ac.cn/VFs/Down/VFDB_setB_pro.fas.gzcd
+wget -c http://www.mgc.ac.cn/VFs/Down/VFDB_setB_pro.fas.gz
 gunzip -d VFDB_setB_pro.fas.gz
 makeblastdb -in VFDB_setB_pro.fas -out VFDB_setB_pro -dbtype prot
 ```
