@@ -33,19 +33,18 @@ You will also need some extensions (in the `extensions` folder of sunbeam).
 
 ```
 # Kraken2bracken extension
-git clone https://github.com/respiratory-immunology-lab/sbx_kraken2bracken sunbeam/extensions/sbx_kraken2bracken
-cat extensions/sbx_kraken2/config.yml >> /path/to/my_project/sunbeam_config.yml
+git clone https://github.com/respiratory-immunology-lab/sbx_kraken2bracken sunbeam-stable/extensions/sbx_kraken2bracken
 
 # Eggnog extension
-git clone https://github.com/ArwaAbbas/sbx_eggnog/ sunbeam/extensions/sbx_eggnog
-conda install --file requirements.txt -c bioconda
+git clone https://github.com/ArwaAbbas/sbx_eggnog/ sunbeam-stable/extensions/sbx_eggnog
+conda install --file sunbeam-stable/extensions/sbx_eggnog/requirements.txt
 ```
 
 Because the default sunbeam_config.yml does not contain the extensions parameters, update it by running:
 
 ```
-cat sunbeam/extensions/sbx_kraken2/config.yml >> /path/to/my_project/sunbeam_config.yml
-cat sunbeam/extensions/sbx_eggnog/config.yml >> /path/to/my_project/sunbeam_config.yml
+cat sunbeam-stable/extensions/sbx_kraken2/config.yml >> /path/to/my_project/sunbeam_config.yml
+cat sunbeam-stable/extensions/sbx_eggnog/config.yml >> /path/to/my_project/sunbeam_config.yml
 ```
 
 ## Databases
