@@ -32,9 +32,20 @@ tests/run_tests.bash -e sunbeam
 You will also need some extensions (in the `extensions` folder of sunbeam).
 
 ```
-# Kraken3bracken extension
-git clone https://github.com/respiratory-immunology-lab/sbx_kraken2bracken
+# Kraken2bracken extension
+git clone https://github.com/respiratory-immunology-lab/sbx_kraken2bracken sunbeam/extensions/sbx_kraken2bracken
 cat extensions/sbx_kraken2/config.yml >> /path/to/my_project/sunbeam_config.yml
+
+# Eggnog extension
+git clone https://github.com/ArwaAbbas/sbx_eggnog/ sunbeam/extensions/sbx_eggnog
+conda install --file requirements.txt -c bioconda
+```
+
+Because the default sunbeam_config.yml does not contain the extensions parameters, update it by running:
+
+```
+cat sunbeam/extensions/sbx_kraken2/config.yml >> /path/to/my_project/sunbeam_config.yml
+cat sunbeam/extensions/sbx_eggnog/config.yml >> /path/to/my_project/sunbeam_config.yml
 ```
 
 ## Databases
@@ -53,12 +64,6 @@ sunbeam init takes one required argument: a path to your project folder. This fo
 ```
 source activate sunbeam
 sunbeam init --data_fp /path/to/fastq/files /path/to/my_project
-```
-
-Because the default sunbeam_config.yml does not contain the extensions parameters, update it by running:
-
-```
-cat extensions/sbx_kraken2/config.yml >> /path/to/my_project/sunbeam_config.yml
 ```
 
 In your project directory directory, a new config file and a new sample list were created (by default named sunbeam_config.yml and samplelist.csv, respectively). Edit the config file in your favorite text editor and samplelist.csv if necessary. You may want to check the paths to your project, databases, adapter sequences etc. An example of the sunbeam_config.yml is provided [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/sunbeam_config.yml).
