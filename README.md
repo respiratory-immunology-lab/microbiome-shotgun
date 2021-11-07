@@ -40,6 +40,12 @@ git clone https://github.com/ArwaAbbas/sbx_eggnog/ sunbeam-stable/extensions/sbx
 conda install --file sunbeam-stable/extensions/sbx_eggnog/requirements.txt
 ```
 
+Of you are interested in fungi, edit it in the `sbx_eggnog.rules` file as following:
+
+```
+download_eggnog_data.py bact fungi viruses --data_dir {params.db_path} -y 
+```
+
 Because the default sunbeam_config.yml does not contain the extensions parameters, update it by running:
 
 ```
