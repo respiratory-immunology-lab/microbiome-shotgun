@@ -98,7 +98,7 @@ cat *.faa > refseq.fa
 rm -rf *_protein.faa
 
 # Create database
-makeblastdb -in refseq.fa -title refseq -dbtype prot -hash_index
+makeblastdb -in refseq.fa -title refseq -dbtype prot -hash_index -max_file_sz '4GB'
 ```
 
 ## CARD database for resistance genes (optional)
@@ -110,8 +110,8 @@ source activate sunbeam
 # Create database
 curl -o broadstreet-v3.1.4.tar.bz2 https://card.mcmaster.ca/download/0/broadstreet-v3.1.4.tar.bz2
 tar -xf broadstreet-v3.1.4.tar.bz2
-makeblastdb -in protein_fasta_protein_homolog_model.fasta -title card_protein -dbtype prot -hash_index
-makeblastdb -in nucleotide_fasta_protein_homolog_model.fasta -title card_nucl -dbtype nucl -hash_index
+makeblastdb -in protein_fasta_protein_homolog_model.fasta -title card_protein -dbtype prot -hash_index -max_file_sz '4GB'
+makeblastdb -in nucleotide_fasta_protein_homolog_model.fasta -title card_nucl -dbtype nucl -hash_index -max_file_sz '4GB'
 ```
 
 ## Virulence factor database (optional)
@@ -123,10 +123,10 @@ source activate sunbeam
 # Virulence factors database
 wget -c http://www.mgc.ac.cn/VFs/Down/VFDB_setB_nt.fas.gz
 gunzip -d VFDB_setB_nt.fas.gz
-makeblastdb -in VFDB_setB_nt.fas -title VFDBnucl -dbtype nucl -hash_index
+makeblastdb -in VFDB_setB_nt.fas -title VFDBnucl -dbtype nucl -hash_index -max_file_sz '4GB'
 
 # Virulence factors database
 wget -c http://www.mgc.ac.cn/VFs/Down/VFDB_setB_pro.fas.gz
 gunzip -d VFDB_setB_pro.fas.gz
-makeblastdb -in VFDB_setB_pro.fas -title VFDBprotein -dbtype prot -hash_index
+makeblastdb -in VFDB_setB_pro.fas -title VFDBprotein -dbtype prot -hash_index -max_file_sz '4GB'
 ```
