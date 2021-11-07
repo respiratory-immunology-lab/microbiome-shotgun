@@ -37,53 +37,6 @@ gzip -d Homo_sapiens.GRCh38.ncrna.fa.gz
 # Other eucaryotic and procaryotic files can be found in the link above
 ```
 
-## Blast databases for nucleic acid (nt) and protein (nr) mapping module load blast
-
-```
-# Activate sunbeam
-source activate sunbeam
-
-# Nt database
-wget -c ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nt.gz
-gunzip -d nt.gz
-makeblastdb -in nt -out nt -dbtype nucl
-
-# Nr database
-wget -c ftp://ftp.ncbi.nlm.nih.gov/blast/db/FASTA/nr.gz
-gunzip -d nr.gz
-makeblastdb -in nr -out nr -dbtype prot
-```
-
-## CARD database for resistance genes (optional)
-
-```
-# Activate sunbeam
-source activate sunbeam
-
-# Create database
-curl -o broadstreet-v3.1.4.tar.bz2 https://card.mcmaster.ca/download/0/broadstreet-v3.1.4.tar.bz2
-tar -xf broadstreet-v3.1.4.tar.bz2
-makeblastdb -in protein_fasta_protein_homolog_model.fasta -title card_protein -dbtype prot -hash_index
-makeblastdb -in nucleotide_fasta_protein_homolog_model.fasta -title card_nucl -dbtype nucl -hash_index
-```
-
-## Virulence factor database (optional)
-
-```
-# Activate sunbeam
-source activate sunbeam
-
-# Virulence factors database
-wget -c http://www.mgc.ac.cn/VFs/Down/VFDB_setB_nt.fas.gz
-gunzip -d VFDB_setB_nt.fas.gz
-makeblastdb -in VFDB_setB_nt.fas -title VFDBnucl -dbtype nucl -hash_index
-
-# Virulence factors database
-wget -c http://www.mgc.ac.cn/VFs/Down/VFDB_setB_pro.fas.gz
-gunzip -d VFDB_setB_pro.fas.gz
-makeblastdb -in VFDB_setB_pro.fas -title VFDBprotein -dbtype prot -hash_index
-```
-
 ## Kraken databases for taxonomy
 
 There are some small pre-compiled databases available. However, because we want to go in more depth and are interested in fungi as well we will build our own.
@@ -122,3 +75,58 @@ bash install_bracken.sh
 bracken-build -d [mydatabase] -t [numberofthreads] -x [directorywherekraken2isinstalled]
 ```
 
+## RefSeq database for annotation (proteins)
+
+```
+# Activate sunbeam
+source activate sunbeam
+
+# Get the RefSeq summary files for viral, bacterial and fungal genomes
+curl -o viral_summary.txt ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/viral/assembly_summary.txt
+curl -o bacteria_summary.txt ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/bacteria/assembly_summary.txt
+curl -o fungi_summary.txt ftp://ftp.ncbi.nlm.nih.gov/genomes/refseq/fungi/assembly_summary.txt
+
+# Create a single file with links for downloads (protein coding fasta files of complete genomes)
+cat viral_summary.txt bacteria_summary.txt fungi_summary.txt > assembly_summary.txt
+awk -F "\t" '$12=="Complete Genome" && $11=="latest"{print $20}' assembly_summary.txt > ftpdirpaths
+awk 'BEGIN{FS=OFS="/";filesuffix="protein.faa.gz"}{ftpdir=$0;asm=$10;file=asm"_"filesuffix;print ftpdir,file}' ftpdirpaths > ftpfilepaths 
+
+# Download all genomes and create a single fasta file
+wget -i ftpfilepaths #35009 genomes downloaded Nov 2021
+gunzip *.gz
+cat *.faa > refseq.fa
+rm -rf *_protein.faa
+
+# Create database
+makeblastdb -in refseq.fa -title refseq -dbtype prot -hash_index
+```
+
+## CARD database for resistance genes (optional)
+
+```
+# Activate sunbeam
+source activate sunbeam
+
+# Create database
+curl -o broadstreet-v3.1.4.tar.bz2 https://card.mcmaster.ca/download/0/broadstreet-v3.1.4.tar.bz2
+tar -xf broadstreet-v3.1.4.tar.bz2
+makeblastdb -in protein_fasta_protein_homolog_model.fasta -title card_protein -dbtype prot -hash_index
+makeblastdb -in nucleotide_fasta_protein_homolog_model.fasta -title card_nucl -dbtype nucl -hash_index
+```
+
+## Virulence factor database (optional)
+
+```
+# Activate sunbeam
+source activate sunbeam
+
+# Virulence factors database
+wget -c http://www.mgc.ac.cn/VFs/Down/VFDB_setB_nt.fas.gz
+gunzip -d VFDB_setB_nt.fas.gz
+makeblastdb -in VFDB_setB_nt.fas -title VFDBnucl -dbtype nucl -hash_index
+
+# Virulence factors database
+wget -c http://www.mgc.ac.cn/VFs/Down/VFDB_setB_pro.fas.gz
+gunzip -d VFDB_setB_pro.fas.gz
+makeblastdb -in VFDB_setB_pro.fas -title VFDBprotein -dbtype prot -hash_index
+```
