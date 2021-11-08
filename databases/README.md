@@ -97,8 +97,12 @@ gunzip *.gz
 cat *.faa > refseq.fa
 rm -rf *_protein.faa
 
+# Remove duplicate sequences
+module load genometools
+gt sequniq -o refsequnique.fa refseq.fa
+
 # Create database
-makeblastdb -in refseq.fa -title refseq -dbtype prot -hash_index -max_file_sz '4GB'
+makeblastdb -in refsequnique.fa -title refseq -dbtype prot -hash_index -max_file_sz '4GB'
 ```
 
 ## CARD database for resistance genes (optional)
