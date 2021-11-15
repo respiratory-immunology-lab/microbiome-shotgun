@@ -99,7 +99,7 @@ sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam
 # Co-assembly with Megahit
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_coassembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 15 -w 60 -p --use-conda all_coassemble
 
-# Co-assembly with Megahit
+# Functional profiling with eggNOG
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_eggnog_bac --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 15 -w 60 -p --use-conda all_eggnog_bac
 
 # Contigs database with anvio
