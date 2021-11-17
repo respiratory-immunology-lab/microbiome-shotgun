@@ -29,15 +29,19 @@ bash install.sh
 tests/run_tests.bash -e sunbeam
 ```
 
+### Installing extensions
+
 You will also need some extensions (in the `extensions` folder of sunbeam).
 
 ```
 # Kraken2bracken extension
 git clone https://github.com/respiratory-immunology-lab/sbx_kraken2bracken sunbeam-stable/extensions/sbx_kraken2bracken
 
+# Co-assembly extension
+git clone https://github.com/sunbeam-labs/sbx_coassembly/ sunbeam-stable/extensions/sbx_coassembly
+
 # Eggnog extension
 git clone https://github.com/ArwaAbbas/sbx_eggnog/ sunbeam-stable/extensions/sbx_eggnog
-conda install --file sunbeam-stable/extensions/sbx_eggnog/requirements.txt
 ```
 
 Of you are interested in fungi, edit it in the `sbx_eggnog.rules` file as following:
