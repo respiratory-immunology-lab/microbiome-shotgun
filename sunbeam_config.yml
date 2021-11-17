@@ -89,7 +89,7 @@ download:
 sbx_kraken2bracken:
   threads: 16
   db: /home/cpat0003/of33/Databases/shotgun/kraken/kraken20210613
-  read_length: 250
+  read_length: 250 # Change to 150 for metatranscriptomics
 
 sbx_coassembly:
   threads: 16
@@ -101,5 +101,6 @@ sbx_anvio:
   pfam_dir: /home/cpat0003/of33/Databases/shotgun/anvio
   kaiju_dir: /home/cpat0003/of33/Databases/shotgun/kaiju
 
-sbx_deepARG:
-  deepARG_dir: /home/cpat0003/of33/Databases/shotgun/deepARG
+sbx_coassembly:
+  threads: 16
+  group_file: ''
