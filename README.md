@@ -100,6 +100,9 @@ sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam
 # Annotation with Blast (needs longer wall time)
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_annotate --account=of33 --time=7-00:00:00 --mem-per-cpu=16G --ntasks=1 --cpus-per-task=10" -j 200 -w 60 -p all_annotate
 
+# If some jobs didn't finish on time
+sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_annotate --account=of33 --time=7-00:00:00 --mem-per-cpu=16G --ntasks=1 --cpus-per-task=24" -j 200 -w 60 -p all_annotate --rerun-incomplete]
+
 # Co-assembly with Megahit
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_coassembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 30 -w 60 -p --use-conda all_coassemble
 
