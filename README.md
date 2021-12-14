@@ -100,14 +100,11 @@ sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam
 # Co-assembly with Megahit
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_coassembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 30 -w 60 -p --use-conda all_coassemble
 
-# Mapping to the co-assembled metagenome (first change the '.fa' extension extension of the co-assembled metagenome to '.fasta')
+# Mapping to the co-assembled metagenome (first run the first anvio step)
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_mapping --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 30 -w 60 -p all_mapping
 
 # Functional profiling with eggNOG
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_eggnog_bac --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 30 -w 120 -p --use-conda all_eggnog_bac
-
-# Contigs database with anvio
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_anvio_contigs --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 30 -w 60 -p --use-conda all_anvio_contigs
 ```
 
 ## Getting host versus non-host read counts
