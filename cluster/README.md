@@ -21,6 +21,9 @@ module load [module]
 
 # Cancel a smux session
 scancel [jobID]
+
+# View specific information of a job
+scontrol show job [jobID]
 ```
 
 ## Downloading data from BaseSpace
