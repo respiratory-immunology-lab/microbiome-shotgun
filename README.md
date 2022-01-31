@@ -136,8 +136,8 @@ cd metalaffa
 
 A few files need to be updated or added to enable the use of MetaLAFFA on the cluster and tell MetaLAFFA to skip the QC and host decontamination steps (already performed by sunbeam).
 
-1) `cluster.py` located in `[location_of_your_choice]/metalaffa/config/` needs to be updated to [this] (https://github.com/respiratory-immunology-lab/microbiome-shotgun/MetaLAFFA/cluster.py)
-2) `pipeline_steps.txt` located in `[location_of_your_choice]/metalaffa/` needs to be updated to [this] (https://github.com/respiratory-immunology-lab/microbiome-shotgun/MetaLAFFA/pipeline_steps.txt)
+1) `cluster.py` located in `[location_of_your_choice]/metalaffa/config/` needs to be updated to [this](https://github.com/respiratory-immunology-lab/microbiome-shotgun/MetaLAFFA/cluster.py)
+2) `pipeline_steps.txt` located in `[location_of_your_choice]/metalaffa/` needs to be updated to [this](https://github.com/respiratory-immunology-lab/microbiome-shotgun/MetaLAFFA/pipeline_steps.txt)
 3) A new job submission file specific to M3 needs `m3_submission_wrapper.py` needs to be added in `[location_of_your_choice]/src/`, this file is available [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/MetaLAFFA/m3_submission_wrapper.py)
 
 Add executing permission to the `m3_submission_wrapper.py` file:
