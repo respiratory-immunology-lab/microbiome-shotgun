@@ -24,6 +24,9 @@ scancel [jobID]
 
 # View specific information of a job
 scontrol show job [jobID]
+
+# Cancel all PENDING jobs for the user
+scancel -t PENDING -u [username]
 ```
 
 ## Downloading data from BaseSpace
