@@ -7,7 +7,7 @@ This pipeline is based on Sunbeam and MetaLAFFA pipelines, which provide flexibl
 
 Click [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/tree/master/cluster) for more information about how to work on the cluster and download data directly from basespace.
 
-## SUNBEAM: Decontamination and taxonomy
+## 1) SUNBEAM: Host reads decontamination and taxonomy profiling
 
 #### Installing Sunbeam on the cluster
 
@@ -93,7 +93,7 @@ echo $sample$'\t'$cleancount$'\t'$decontamcount;
 done > sunbeam_output/qc/counts.tsv
 ```
 
-## MetaLAFFA: Functional profiling
+## 2) MetaLAFFA: Functional profiling
 
 Functional profiling is performed using the MetaLAFFA tool (more information available [here](https://github.com/borenstein-lab/MetaLAFFA)). This tool is also written in Snakemake but a few steps are required to enable it to run on the cluster.
 
