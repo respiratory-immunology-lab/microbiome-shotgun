@@ -93,7 +93,7 @@ done > sunbeam_output/qc/counts.tsv
 
 ## Functional profiling with MetaLAFFA
 
-Functional profiling is performed using the MetaLAFFA tool available [here](https://github.com/borenstein-lab/MetaLAFFA). This tool is also written in Snakemake but a few steps are required to enable it to run on the cluster.
+Functional profiling is performed using the MetaLAFFA tool (more information available [here](https://github.com/borenstein-lab/MetaLAFFA)). This tool is also written in Snakemake but a few steps are required to enable it to run on the cluster.
 
 ### Installation
 
@@ -111,7 +111,7 @@ If you see any issue with the installation, try using `conda clean --all` and `c
 
 MetaLAFFA automatically installs the databases in the conda environment path. To choose another installation path, change the `file_organisation.py` file located in `~/miniconda3/envs/metalaffa/lib/python3.6/config/` with a new database location. 
 
-Note that all databases are already installed in the cluster's database folder `~/of33/Databases/shotgun/metalaffa/`. See an example of the updated `file_organisation.py` file [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/MetaLAFFA/file_organisation.py).
+Note that all databases are already installed in the cluster's database folder `~/of33/Databases/shotgun/metalaffa/`. See an example of the updated `file_organisation.py` file [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/MetaLAFFA/file_organisation.py).
 
 If you still need to install the databases, run:
 
@@ -136,9 +136,9 @@ cd metalaffa
 
 A few files need to be updated or added to enable the use of MetaLAFFA on the cluster and tell MetaLAFFA to skip the QC and host decontamination steps (already performed by sunbeam).
 
-1) `cluster.py` located in `[location_of_your_choice]/metalaffa/config/` needs to be updated to [this](https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/MetaLAFFA/cluster.py)
-2) `pipeline_steps.txt` located in `[location_of_your_choice]/metalaffa/` needs to be updated to [this](https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/MetaLAFFA/pipeline_steps.txt)
-3) A new job submission file specific to M3 needs `m3_submission_wrapper.py` needs to be added in `[location_of_your_choice]/src/`, this file is available [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/MetaLAFFA/m3_submission_wrapper.py)
+1) `cluster.py` located in `[location_of_your_choice]/metalaffa/config/` needs to be updated to [THIS](https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/MetaLAFFA/cluster.py).
+2) `pipeline_steps.txt` located in `[location_of_your_choice]/metalaffa/` needs to be updated to [THIS](https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/MetaLAFFA/pipeline_steps.txt).
+3) A new job submission file specific to M3 needs `m3_submission_wrapper.py` needs to be added in `[location_of_your_choice]/src/`, this file is available [HERE](https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/MetaLAFFA/m3_submission_wrapper.py).
 
 Add executing permission to the `m3_submission_wrapper.py` file:
 
