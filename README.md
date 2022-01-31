@@ -3,6 +3,9 @@ Using the shotgun-sunbeam pipeline for shotgun metagenomics sequencing
 
 This pipeline is based on Sunbeam and MetaLAFFA pipelines, which provide flexible Snakemake workflows for shotgun metagenomics analyses. The pipeline starts with Sunbeam for fastq files cleaning, host reads decontamination, and taxonomic profiling. MetaLAFFA tool is then used for functional profiling of the decontaminated reads.
 
+1. [SUNBEAM: Host reads decontamination and taxonomy profiling](https://github.com/respiratory-immunology-lab/microbiome-shotgun#1-sunbeam-host-reads-decontamination-and-taxonomy-profiling)
+2. [MetaLAFFA: Functional profiling](https://github.com/respiratory-immunology-lab/microbiome-shotgun#2-metalaffa-functional-profiling)
+
 ## Working on the cluster
 
 Click [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/tree/master/cluster) for more information about how to work on the cluster and download data directly from basespace.
