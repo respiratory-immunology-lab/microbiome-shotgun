@@ -36,25 +36,12 @@ You will also need some extensions (in the `extensions` folder of sunbeam).
 ```
 # Kraken2bracken extension
 git clone https://github.com/respiratory-immunology-lab/sbx_kraken2bracken sunbeam-stable/extensions/sbx_kraken2bracken
-
-# Co-assembly extension
-git clone https://github.com/sunbeam-labs/sbx_coassembly/ sunbeam-stable/extensions/sbx_coassembly
-
-# Eggnog extension
-git clone https://github.com/ArwaAbbas/sbx_eggnog/ sunbeam-stable/extensions/sbx_eggnog
-```
-
-Of you are interested in fungi, edit it in the `sbx_eggnog.rules` file as following:
-
-```
-download_eggnog_data.py bact fungi viruses --data_dir {params.db_path} -y 
 ```
 
 Because the default sunbeam_config.yml does not contain the extensions parameters, update it by running:
 
 ```
 cat sunbeam-stable/extensions/sbx_kraken2/config.yml >> /path/to/my_project/sunbeam_config.yml
-cat sunbeam-stable/extensions/sbx_eggnog/config.yml >> /path/to/my_project/sunbeam_config.yml
 ```
 
 ## Databases
@@ -62,7 +49,6 @@ cat sunbeam-stable/extensions/sbx_eggnog/config.yml >> /path/to/my_project/sunbe
 1) Host genome(s) for decontamination
 2) Kraken databases for taxonomy
 3) Bracken databases (related to kraken2)
-4) Blast databases for nucleic acid (nt) and protein (nr) mapping
 
 All these databases are *available on the cluster* at `~/of33/Databases/shotgun`. Don't re-build your own unless absolutely necessary. If necessary, follow the instructions provided [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/tree/master/databases).
 
@@ -87,29 +73,11 @@ sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam
 
 # Classification with Kraken2 and Bracken correction
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_kraken2bracken --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 30 -w 60 -p --use-conda all_kraken2bracken
-
-# Assembly with Megahit
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_assembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 30 -w 60 -p all_assembly
-
-# Annotation with Blast (needs longer wall time)
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_annotate --account=of33 --time=7-00:00:00 --mem-per-cpu=16G --ntasks=1 --cpus-per-task=10" -j 200 -w 60 -p all_annotate
-
-# If some jobs didn't finish on time
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_annotate --account=of33 --time=7-00:00:00 --mem-per-cpu=16G --ntasks=1 --cpus-per-task=24" -j 200 -w 60 -p all_annotate --rerun-incomplete
-
-# Co-assembly with Megahit
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_coassembly --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 30 -w 60 -p --use-conda all_coassemble
-
-# Mapping to the co-assembled metagenome (first run the first anvio step)
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_mapping --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 30 -w 60 -p all_mapping
-
-# Functional profiling with eggNOG
-sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_eggnog_bac --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 30 -w 120 -p --use-conda all_eggnog_bac
 ```
 
 ## Getting host versus non-host read counts
 
-The total number of reads and the non-mapping number of reads can be retrieved using this wraper script.
+The total number of reads and the non-mapping number of reads can be retrieved using this wrapper script.
 
 ```
 for f in sunbeam_output/qc/cleaned/*_1.fastq.gz;
@@ -123,6 +91,88 @@ echo $sample$'\t'$cleancount$'\t'$decontamcount;
 done > sunbeam_output/qc/counts.tsv
 ```
 
+## Functional profiling with MetaLAFFA
+
+Functional profiling is performed using the MetaLAFFA tool available [here](https://github.com/borenstein-lab/MetaLAFFA). This tool is also written in Snakemake but a few steps are required to enable it to run on the cluster.
+
+### Installation
+
+As MetaLAFFA requires a specific version of python, the conda environment needs to be as following:
+
+```
+conda create -n metalaffa python=3.6.10 
+conda activate metalaffa
+conda install -c bioconda -c borenstein-lab metalaffa
+```
+
+If you see any issue with the installation, try using `conda clean --all` and `conda config --remove channels conda-forge` commands before you create the new conda environment.
+
+### Databases installation
+
+MetaLAFFA automatically installs the databases in the conda environment path. To choose another installation path, change the `file_organisation.py` file located in `~/miniconda3/envs/metalaffa/lib/python3.6/config/` with a new database location. 
+
+Note that all databases are already installed in the cluster's database folder `~/of33/Databases/shotgun/metalaffa/`. See an example of the updated `file_organisation.py` file [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/MetaLAFFA/file_organisation.py).
+
+If you still need to install the databases, run:
+
+```
+# Download and prepare default reference databases
+prepare_databases.py -hr -km -u -c
+```
+
+### Creation a new metalaffa project folder
+
+With your MetaLAFFA conda environment active, you can create a new metalaffa project directory as following. This will also copy some of the parameter files needed to run the pipeline.
+
+```
+# Create a metalaffa project directory
+create_new_MetaLAFFA_project.py [location_of_your_choice]/metalaffa
+
+# Enter the directory
+cd metalaffa
+```
+
+### Change configuration files to run MetaLAFFA on the cluster
+
+A few files need to be updated or added to enable the use of MetaLAFFA on the cluster and tell MetaLAFFA to skip the QC and host decontamination steps (already performed by sunbeam).
+
+1) `cluster.py` located in `[location_of_your_choice]/metalaffa/config/` needs to be updated to [this] (https://github.com/respiratory-immunology-lab/microbiome-shotgun/MetaLAFFA/cluster.py)
+2) `pipeline_steps.txt` located in `[location_of_your_choice]/metalaffa/` needs to be updated to [this] (https://github.com/respiratory-immunology-lab/microbiome-shotgun/MetaLAFFA/pipeline_steps.txt)
+3) A new job submission file specific to M3 needs `m3_submission_wrapper.py` needs to be added in `[location_of_your_choice]/src/`, this file is available [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/MetaLAFFA/m3_submission_wrapper.py)
+
+Add executing permission to the `m3_submission_wrapper.py` file:
+
+```
+chmod +x [location_of_your_choice]/metalaffa/src/m3_submission_wrapper.py
+```
+
+### Running MetaLAFFA
+
+Copy your clean and host decontaminated files into the MetaLAFFA `data` folder.
+
+```
+cp [sunbeam_location]/sunbeam_output/qc/decontam/*fastq.gz [location_of_your_choice]/metalaffa/data/
+```
+
+MetaLAFFA requires specific sample names finishing in `.R1.fastq.gz` and `.R2.fastq.gz`. If required, rename files as following:
+
+```
+# If files finish with _1.fastq.gz and _2.fastq.gz
+rename _1. .R1. *
+rename _2. .R2. *
+
+# If files finish with _R1.fastq.gz and _R2.fastq.gz
+rename _R1. .R1. *
+rename _R2. .R2. *
+```
+
+You are now finally ready to use MetaLAFFA. Don't forget the `--use-cluster` flag to run the pipeline on the cluster.
+
+```
+# Run MetaLAFFA (in your metalaffa directory)
+./MetaLAFFA.py --use-cluster
+```
+
 ## Citation
 
 If you used this repository in a publication, please mention its url.
@@ -130,6 +180,7 @@ If you used this repository in a publication, please mention its url.
 In addition, you may cite the tools used by this pipeline:
 
 * **Sunbeam:** EL Clarke, LJ Taylor, C Zhao et al. Sunbeam: an extensible pipeline for analyzing metagenomic sequencing experiments. Microbiome 7:46 (2019).
+* **MetaLAFFA:** Eng, A., Verster, A. J., & Borenstein, E. (2020). MetaLAFFA: a flexible, end-to-end, distributed computing-compatible metagenomic functional annotation pipeline. BMC bioinformatics, 21(1), 1-9.
 
 ## Rights
 
