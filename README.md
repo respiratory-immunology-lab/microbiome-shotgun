@@ -1,13 +1,15 @@
 Using the shotgun-sunbeam pipeline for shotgun metagenomics sequencing
 ======================================================================
 
-This pipeline is based on Sunbeam pipeline, which provides a foundation to build more in-depth analyses and to enable comparisons in metagenomic sequencing experiments by removing problematic, low-complexity reads and standardizing post-processing and analytical steps. Sunbeam is written in Python using the Snakemake workflow management software. This pipeline has been optimised to work on M3 cluster.
+This pipeline is based on Sunbeam and MetaLAFFA pipelines, which provide flexible Snakemake workflows for shotgun metagenomics analyses. The pipeline starts with Sunbeam for fastq files cleaning, host reads decontamination, and taxonomic profiling. MetaLAFFA tool is then used for functional profiling of the decontaminated reads.
 
 ## Working on the cluster
 
 Click [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/tree/master/cluster) for more information about how to work on the cluster and download data directly from basespace.
 
-## Installing Sunbeam on the cluster
+## SUNBEAM: Decontamination and taxonomy
+
+#### Installing Sunbeam on the cluster
 
 Sunbeam is a pipeline written in snakemake that simplifies and automates many of the steps in metagenomic sequencing analysis. See https://sunbeam.readthedocs.io/en/latest/index.html for more information.
 
@@ -29,7 +31,7 @@ bash install.sh
 tests/run_tests.bash -e sunbeam
 ```
 
-### Installing extensions
+#### Installing extensions
 
 You will also need some extensions (in the `extensions` folder of sunbeam).
 
@@ -44,7 +46,7 @@ Because the default sunbeam_config.yml does not contain the extensions parameter
 cat sunbeam-stable/extensions/sbx_kraken2/config.yml >> /path/to/my_project/sunbeam_config.yml
 ```
 
-## Databases
+#### Databases
 
 1) Host genome(s) for decontamination
 2) Kraken databases for taxonomy
@@ -52,7 +54,7 @@ cat sunbeam-stable/extensions/sbx_kraken2/config.yml >> /path/to/my_project/sunb
 
 All these databases are *available on the cluster* at `~/of33/Databases/shotgun`. Don't re-build your own unless absolutely necessary. If necessary, follow the instructions provided [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/tree/master/databases).
 
-## Initialise your sunbeam project
+#### Initialise your sunbeam project
 
 sunbeam init takes one required argument: a path to your project folder. This folder will be created if it doesn’t exist. You can also specify the path to your gzipped fastq files, and Sunbeam will try to guess how your samples are named, and whether they’re paired.
 
@@ -63,7 +65,7 @@ sunbeam init --data_fp /path/to/fastq/files /path/to/my_project
 
 In your project directory directory, a new config file and a new sample list were created (by default named sunbeam_config.yml and samplelist.csv, respectively). Edit the config file in your favorite text editor and samplelist.csv if necessary. You may want to check the paths to your project, databases, adapter sequences etc. An example of the sunbeam_config.yml is provided [here](https://github.com/respiratory-immunology-lab/microbiome-shotgun/Sunbeam/blob/master/sunbeam_config.yml).
 
-## Running sunbeam
+#### Running sunbeam
 
 These are the parameters for using the `--partition=genomics --qos=genomics` partition on the cluster.
 
@@ -75,7 +77,7 @@ sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam
 sunbeam run --configfile sunbeam_config.yml --cluster "sbatch --job-name=sunbeam_all_kraken2bracken --account=of33 --time=04:00:00 --mem-per-cpu=8G --ntasks=1 --cpus-per-task=16 --partition=genomics --qos=genomics" -j 30 -w 60 -p --use-conda all_kraken2bracken
 ```
 
-## Getting host versus non-host read counts
+#### Getting host versus non-host read counts
 
 The total number of reads and the non-mapping number of reads can be retrieved using this wrapper script.
 
@@ -91,11 +93,11 @@ echo $sample$'\t'$cleancount$'\t'$decontamcount;
 done > sunbeam_output/qc/counts.tsv
 ```
 
-## Functional profiling with MetaLAFFA
+## MetaLAFFA: Functional profiling
 
 Functional profiling is performed using the MetaLAFFA tool (more information available [here](https://github.com/borenstein-lab/MetaLAFFA)). This tool is also written in Snakemake but a few steps are required to enable it to run on the cluster.
 
-### Installation
+#### Installation
 
 As MetaLAFFA requires a specific version of python, the conda environment needs to be as following:
 
@@ -107,7 +109,7 @@ conda install -c bioconda -c borenstein-lab metalaffa
 
 If you see any issue with the installation, try using `conda clean --all` and `conda config --remove channels conda-forge` commands before you create the new conda environment.
 
-### Databases installation
+#### Databases installation
 
 MetaLAFFA automatically installs the databases in the conda environment path. To choose another installation path, change the `file_organisation.py` file located in `~/miniconda3/envs/metalaffa/lib/python3.6/config/` with a new database location. 
 
@@ -120,7 +122,7 @@ If you still need to install the databases, run:
 prepare_databases.py -hr -km -u -c
 ```
 
-### Creation a new metalaffa project folder
+#### Creation a new metalaffa project folder
 
 With your MetaLAFFA conda environment active, you can create a new metalaffa project directory as following. This will also copy some of the parameter files needed to run the pipeline.
 
@@ -132,7 +134,7 @@ create_new_MetaLAFFA_project.py [location_of_your_choice]/metalaffa
 cd metalaffa
 ```
 
-### Change configuration files to run MetaLAFFA on the cluster
+#### Change configuration files to run MetaLAFFA on the cluster
 
 A few files need to be updated or added to enable the use of MetaLAFFA on the cluster and tell MetaLAFFA to skip the QC and host decontamination steps (already performed by sunbeam).
 
@@ -146,7 +148,7 @@ Add executing permission to the `m3_submission_wrapper.py` file:
 chmod +x [location_of_your_choice]/metalaffa/src/m3_submission_wrapper.py
 ```
 
-### Running MetaLAFFA
+#### Running MetaLAFFA
 
 Copy your clean and host decontaminated files into the MetaLAFFA `data` folder.
 
