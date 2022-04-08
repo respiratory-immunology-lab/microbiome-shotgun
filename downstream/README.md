@@ -12,7 +12,7 @@ The `kraken2_preprocess()` function will return a list with two elements: firstl
 
 ```{r}
 # Read in and pre-process raw kraken2 data
-bact_kraken2_input <- kraken2_preprocess(filepath = here::here('input', 'bal_and_stool', 'all_samples_kraken2.csv'))
+bact_kraken2_input <- kraken2_preprocess(filepath = here::here('input', 'shotgun_data', 'all_samples_kraken2.csv'))
 
 # Extract individual elements
 kraken2_otu_table <- bact_kraken2_input$kraken2_otu_table
