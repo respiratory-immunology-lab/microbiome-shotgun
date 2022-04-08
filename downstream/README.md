@@ -187,4 +187,4 @@ bact_limma_age$volcano_plot$Age
 This will produce a volcano plot that looks something like this (the taxa names have been omitted, but will normally appear):
 
 
-<img src="https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/downstream/assets/bact_volc_plot.png" width = 75%>
+<div text-align: center><img src="https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/downstream/assets/bact_volc_plot.png" width = 75%></div>
