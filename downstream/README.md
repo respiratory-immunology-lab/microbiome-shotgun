@@ -132,3 +132,45 @@ Say we now want to see whether there are bacteria that are differentially abunda
 
 ### Arguments for `phyloseq_limma()`
 
+- `phyloseq_object`: a phyloseq object to use for differential abundance testing.
+- `metadata_vars`: optional - a character vector of column(s) to keep for DA testing (NOT required if providing a formula).
+- `metadata_condition`: optional - a conditional statement about a certain metadata value, e.g. keeping a certain age group only.
+- `model_matrix`: optional - best to let the function create the model matrix for you.
+- `model_formula_as_string`: just like it sounds - a string containing the model formula you want to use (only works with '+' and not '*' at this stage).
+- `use_contrast_matrix`: a boolean selector for whether to use the contrast matrix or a selected coefficient - the function should select the correct option.
+- `coefficients`: selection of coefficient(s) you want to be tested. This will depend on the order of variables in the formula, and you can select as many as you'd like (e.g. `coefficients = 2`, or `coefficients = 3:4`).
+- `factor_reorder_list`: optional - a named list containing reordered factor values, e.g. `list(Group = c('GroupHealthy', 'GroupTreatment1', 'GroupTreatment2'))`
+- `continuous_modifier_list`: optional - a named list containing functions to alter continuous variables, e.g. `list(Age = function (x) x / 365)` to change ages in days to ages in years.
+- `contrast_matrix`: optional - best to let the function create the contrast matrix for you.
+- `adjust_method`: optional - the method used to correct for multiple comparisons, listed [here](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/p.adjust).
+- `rownames`: optional - a custom vector of names to be used if you don't wish the names to be automatically derived from taxonomy.
+- `tax_id_col`: the phyloseq object `tax_table` column you wish to use for naming - this should match the level being tested.
+- `adj_pval_threshold` (default = 0.05): the minimum level deemed significant.
+- `logFC_threshold` (default = 1): the minimum log-fold change deemed meaningful.
+- `legend_metadata_string`: optional - a custom name for colour or fill options.
+- `volc_plot_title`: optional - a custom title for the volcano plot.
+- `volc_plot_subtitle`: optional - a custom subtitle for the volcano plot.
+- `volc_plot_xlab`: optional - a custom x label for the volcano plot.
+- `volc_plot_ylab`: optional - a custom y label for the volcano plot.
+
+### Continuous example
+
+If we have longitudinal microbiome sampling, we may want to know which taxa change with time. As there is likely to be little change on a day-to-day basis, we can also modify the age information from days to years. Furthermore, we can even control for potentially confounding factors like individual variation.
+
+```{r}
+# Run custom limma continuous function for taxa vs age
+bact_limma_age <- phyloseq_limma(phyloseq_object = bact_kraken2_logCSS,
+                                 model_formula_as_string = '~ Age + Individual',
+                                 tax_id_col = 'taxa',
+                                 continuous_modifier_list = list(Age = function (x) x / 365),
+                                 coefficients = 2,
+                                 volc_plot_title = 'Differentially Abundant Taxa over Time',
+                                 volc_plot_xlab = 'log2FC/year')
+
+# View volcano plot
+bact_limma_age$volcano_plot$Age
+```
+
+This will produce a volcano plot that looks something like this:
+
+<img src="">
