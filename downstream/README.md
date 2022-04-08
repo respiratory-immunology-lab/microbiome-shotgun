@@ -63,7 +63,7 @@ bact_kraken2_samples <- prune_samples(colSums(otu_table(bact_kraken2)) > minread
 # Filter out taxa based on a minimum number of reads [detectionThreshold] and prevalence [prevalenceThreshold]
 detectionThreshold <- 0 # originally set to 0
 prevalenceThreshold <- 0.1 # originally set to 0.1
-bact_kraken2_filtered <- core(bact_kraken2_assigned,
+bact_kraken2_filtered <- core(bact_kraken2_samples,
                               detection = detectionThreshold,
                               prevalence = prevalenceThreshold,
                               include.lowest = FALSE)
@@ -125,3 +125,10 @@ saveRDS(bact_kraken2_CSS, here('output', 'bact_kraken2_CSS.rds'))
 bact_kraken2_logCSS <- microbiome::transform(bact_kraken2_CSS, transform = 'log')
 saveRDS(bact_kraken2_logCSS, here('output', 'bact_kraken2_logCSS.rds'))
 ```
+
+## Limma wrapper function for differential abundance testing
+
+Say we now want to see whether there are bacteria that are differentially abundant according to some other metadata variable we have available. Perhaps we have information about an individual's age at sampling, or we have some grouping information. This information can be input into a custom wrapper function around the popular `limma` package we provide here, called `phyloseq_limma()`.
+
+### Arguments for `phyloseq_limma()`
+
