@@ -153,6 +153,19 @@ Say we now want to see whether there are bacteria that are differentially abunda
 - `volc_plot_xlab`: optional - a custom x label for the volcano plot.
 - `volc_plot_ylab`: optional - a custom y label for the volcano plot.
 
+### Function output
+
+The function will return a list with different outputs from the function.
+
+- `input_data`: the original OTU data used to run the analysis.
+- `test_variables`: a data.frame with the metadata variables used for the analysis.
+- `model_matrix`: the model matrix generated (or provided) to the function.
+- `constrast_matrix` OR `coefficients`: either the contrast matrix used, or the coefficients selected, depending on the analysis you chose to run.
+- `limma_significant`: a data.frame containing the signficant taxa determined by the limma function, with the adjusted p-value and logFC threshold selected.
+- `limma_all`: a data.frame containing the significance levels of DA analysis for all taxa.
+- `volcano_plots`: volcano plots for each of the comparisons/coefficients selected.
+- `venn_diagram`: a Venn diagram that will show up when you run the function.
+
 ### Continuous example
 
 If we have longitudinal microbiome sampling, we may want to know which taxa change with time. As there is likely to be little change on a day-to-day basis, we can also modify the age information from days to years. Furthermore, we can even control for potentially confounding factors like individual variation.
