@@ -6,7 +6,7 @@ Given that much of the quality control and filtering of our shotgun metagenomic 
 
 The first step is to load in your `all_samples_kraken2.csv` or `all_samples_bracken.csv` file, and extract the OTU ID and consensus lineage information. This will help set you up for preparation of a `phyloseq` container object to hold your data.
 
-We provide a custom function here (`kraken2_preprocess.R`) for producing a taxonomy table and OTU table with unique identifiers from your output file. You may wish to correct the column names after this function however.
+We provide a custom function here ([`kraken2_preprocess.R`](https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/downstream/kraken2_preprocess.R)) for producing a taxonomy table and OTU table with unique identifiers from your output file. You may wish to correct the column names after this function however.
 
 The `kraken2_preprocess()` function will return a list with two elements: firstly an object called `kraken2_tax_table` which holds the taxonomy table, and secondly one called `kraken2_otu_table` which holds the OTU read count information (these can be individually extracted using the typical `$` notation).
 
@@ -128,7 +128,7 @@ saveRDS(bact_kraken2_logCSS, here('output', 'bact_kraken2_logCSS.rds'))
 
 ## Limma wrapper function for differential abundance testing
 
-Say we now want to see whether there are bacteria that are differentially abundant according to some other metadata variable we have available. Perhaps we have information about an individual's age at sampling, or we have some grouping information. This information can be input into a custom wrapper function around the popular `limma` package we provide here, called `phyloseq_limma()`.
+Say we now want to see whether there are bacteria that are differentially abundant according to some other metadata variable we have available. Perhaps we have information about an individual's age at sampling, or we have some grouping information. This information can be input into a custom wrapper function around the popular `limma` package we provide here, called [`phyloseq_limma()`](https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/downstream/phyloseq_limma.R).
 
 ### Arguments for `phyloseq_limma()`
 
