@@ -188,3 +188,9 @@ This will produce a volcano plot that looks something like this (the taxa names 
 
 
 <img src="https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/downstream/assets/bact_volc_plot.png" width = 75%>
+
+### Categorical example
+
+In another example, we may have a categorical variable that we would like to test to see whether there are differences between groups.
+
+## Scatter plots of significant taxa with a continuous explanatory variable
