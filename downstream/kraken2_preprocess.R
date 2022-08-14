@@ -1,3 +1,9 @@
+############################################################################################
+# Copyright (c) 2022 - Respiratory Immunology Lab, Monash University, Melbourne, Australia #
+# Author: Matthew Macowan                                                                  #
+# This script is provided under the MIT licence (see LICENSE.txt for details)              #
+############################################################################################
+
 # Define a function to process the raw output from kraken2 and prepare it for use in a phyloseq object
 kraken2_preprocess <- function(filepath = NULL, otu_id_colname = '#OTU ID', lineage_colname = 'Consensus Lineage') {
   # Load required packages

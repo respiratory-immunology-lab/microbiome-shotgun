@@ -161,8 +161,8 @@ The function will return a list with different outputs from the function.
 - `test_variables`: a data.frame with the metadata variables used for the analysis.
 - `model_matrix`: the model matrix generated (or provided) to the function.
 - `constrast_matrix` OR `coefficients`: either the contrast matrix used, or the coefficients selected, depending on the analysis you chose to run.
-- `limma_significant`: a data.frame containing the signficant taxa determined by the limma function, with the adjusted p-value and logFC threshold selected.
-- `limma_all`: a data.frame containing the significance levels of DA analysis for all taxa.
+- `limma_significant`: a list of data.frames containing the signficant taxa determined by the limma function, with the adjusted p-value and logFC threshold selected, for each comparison/coefficient.
+- `limma_all`: a list of data.frames containing the significance levels of DA analysis for all taxa for each comparison/coefficient.
 - `volcano_plots`: volcano plots for each of the comparisons/coefficients selected.
 - `venn_diagram`: a Venn diagram that will show up when you run the function.
 
@@ -181,16 +181,10 @@ bact_limma_age <- phyloseq_limma(phyloseq_object = bact_kraken2_logCSS,
                                  volc_plot_xlab = 'log2FC/year')
 
 # View volcano plot
-bact_limma_age$volcano_plot$Age
+bact_limma_age$volcano_plots$Age
 ```
 
 This will produce a volcano plot that looks something like this (the taxa names have been omitted, but will normally appear):
 
 
 <img src="https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/downstream/assets/bact_volc_plot.png" width = 75%>
-
-### Categorical example
-
-In another example, we may have a categorical variable that we would like to test to see whether there are differences between groups.
-
-## Scatter plots of significant taxa with a continuous explanatory variable
