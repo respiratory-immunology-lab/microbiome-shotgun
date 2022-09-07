@@ -10,9 +10,10 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
                            contrast_matrix = NULL, adjust_method = 'BH', rownames = NULL, 
                            tax_id_col = 'taxa', adj_pval_threshold = 0.05, logFC_threshold = 1, 
                            legend_metadata_string = NULL, volc_plot_title = NULL, volc_plot_subtitle = NULL,
-                           volc_plot_xlab = NULL, volc_plot_ylab = NULL) {
+                           volc_plot_xlab = NULL, volc_plot_ylab = NULL, remove_low_variance_taxa = FALSE,
+                           plot_output_folder = NULL, plot_file_prefix = NULL) {
   # Load required packages
-  pkgs <- c('data.table', 'tidyverse', 'phyloseq', 'limma', 'ggplot2', 'stringr')
+  pkgs <- c('data.table', 'tidyverse', 'phyloseq', 'limma', 'ggplot2', 'ggpmisc', 'stringr')
   for (pkg in pkgs) {
     suppressPackageStartupMessages(library(pkg, character.only = TRUE))
   }
@@ -25,6 +26,16 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
   # Filter phyloseq object by the conditional statement if present
   if(!is.null(metadata_condition)) {
     phyloseq_object <- prune_samples(metadata_condition, phyloseq_object)
+  }
+  
+  # Prune unknown taxa
+  phyloseq_object <- prune_taxa(!str_detect(tax_table(phyloseq_object)[, tax_id_col], 'Unknown'), phyloseq_object)
+  
+  # Remove low variance taxa where requested
+  if (isTRUE(remove_low_variance_taxa)) {
+    otu_variance <- apply(data.frame(otu_table(phyloseq_object)), 1, var)
+    non_zero_variance <- otu_variance > 0
+    phyloseq_object <- prune_taxa(non_zero_variance, phyloseq_object)
   }
   
   # Prepare limma data.frame
@@ -110,6 +121,9 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
   
   # Filter limma data to remove NA values
   ps_limma_data <- ps_limma_data[,!any_NA(test_df)]
+  test_df_colnames <- colnames(test_df)
+  test_df <- data.frame(test_df[!any_NA(test_df), ])
+  colnames(test_df) <- test_df_colnames
   
   # Create design matrix if none provided
   if (is.null(model_matrix)) {
@@ -180,7 +194,7 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
   }
   fit2 <- eBayes(fit2, robust = TRUE, trend = FALSE)
   
-  # Generate a list of the differentially abundant metabolites
+  # Generate a list of the differentially abundant bacteria
   get_all_topTables <- function(fit2, top = TRUE) {
     # Prepare an empty list object
     all_topTables <- list()
@@ -188,13 +202,13 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
     # Run through each of the coefficients and add topTable to the list
     for (coef in 1:dim(fit2$contrasts)[2]) {
       coef_name <- colnames(fit2$contrasts)[coef]
-      metab_topTable <- topTable(fit2, number = dim(fit2)[1], adjust.method = adjust_method, coef = coef)
+      ps_topTable <- topTable(fit2, number = dim(fit2)[1], adjust.method = adjust_method, coef = coef)
       if (top == TRUE) {
-        metab_topTable <- metab_topTable %>%
+        ps_topTable <- ps_topTable %>%
           filter(adj.P.Val < adj_pval_threshold) %>%
           filter(abs(logFC) >= logFC_threshold)
       }
-      all_topTables[[coef_name]] <- metab_topTable
+      all_topTables[[coef_name]] <- ps_topTable
     }
     
     # Return list object
@@ -213,7 +227,7 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
     venn_diagram <- 'No Venn diagram. Greater than 4 comparisons.'
   }
   
-  # Add a direction column to the 'metab_limma_all' topTables
+  # Add a direction column to the 'ps_limma_all' topTables
   limma_add_categorical_direction <- function(ps_limma_all) {
     for (i in 1:length(ps_limma_all)) {
       ps_limma_all[[i]] <- data.frame(ps_limma_all[[i]]) %>%
@@ -264,15 +278,15 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
     plots <- list()
     
     # Make volcano plot for each topTable
-    for (i in 1:length(ps_limma_all)) {
-      plot <- ggplot(ps_limma_all[[i]], aes(x = logFC, y = -log10(adj.P.Val))) +
+    for (i in 1:length(topTable)) {
+      plot <- ggplot(topTable[[i]], aes(x = logFC, y = -log10(adj.P.Val))) +
         geom_point(aes(color = direction)) +
         geom_hline(yintercept = -log10(adj_pval_threshold), linetype = 2) +
-        geom_vline(xintercept = -1, linetype = 2) +
-        geom_vline(xintercept = 1, linetype = 2) +
+        geom_vline(xintercept = -logFC_threshold, linetype = 2) +
+        geom_vline(xintercept = logFC_threshold, linetype = 2) +
         scale_color_manual(values = c('Decreased' = 'blue', 'Increased' = 'red', 'NS' = 'grey70'), name = plot_color_labels[i]) +
-        geom_text_repel(data = ps_limma_all[[i]][ps_limma_all[[i]]$adj.P.Val < adj_pval_threshold, ],
-                        label = rownames(ps_limma_all[[i]][ps_limma_all[[i]]$adj.P.Val < adj_pval_threshold, ]),
+        geom_text_repel(data = topTable[[i]][topTable[[i]]$adj.P.Val < adj_pval_threshold, ],
+                        label = rownames(topTable[[i]][topTable[[i]]$adj.P.Val < adj_pval_threshold, ]),
                         size = 2) +
         labs(title = plot_title,
              subtitle = plot_subtitle,
@@ -280,12 +294,47 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
              y = plot_ylab)
       
       # Add plot to list
-      var_name <- names(ps_limma_all[i])
+      var_name <- names(topTable[i])
       plots[[var_name]] <- plot
     }
     
     # Return plots
     plots
+  }
+  
+  # Define function to plot bar plots
+  limma_bar_plots <- function(topTable, plot_title, plot_subtitle, plot_xlab, plot_color_labels) {
+    # Create blank list to hold plots
+    plots <- list()
+    
+    # Make bar plot for each topTable
+    for (i in 1:length(topTable)) {
+      m <- topTable[[i]] %>%
+        mutate(feature = rownames(topTable[[i]])) %>%
+        arrange(abs(logFC)) %>%
+        slice_tail(n = 40) %>%
+        arrange(logFC) %>%
+        mutate(suffix = ifelse(str_length(feature) > 50, '...', '')) %>%
+        mutate(feature = factor(make.unique(paste0(substr(feature, 1, 50), suffix)), 
+                                levels = make.unique(paste0(substr(feature, 1, 50), suffix))),
+               direction = ifelse(logFC > 0, 'Increased', 'Decreased')) %>%
+        dplyr::select(-suffix)
+      
+      plot <- ggplot(m, aes(x = logFC, y = feature)) +
+        geom_col(aes(fill = direction), alpha = 0.7, width = 0.8) +
+        scale_fill_manual(values = c('Decreased' = 'blue', 'Increased' = 'red'), plot_color_labels[i]) +
+        labs(title = plot_title,
+             subtitle = plot_subtitle,
+             x = plot_xlab,
+             y = 'Taxa')
+      
+      # Add plot to list
+      var_name <- names(topTable[i])
+      plots[[var_name]] <- plot
+    }
+    
+    # Return plots
+    return(plots)
   }
   
   # Prepare labelling
@@ -313,27 +362,173 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
     plot_ylab <- volc_plot_ylab
   }
   
-  # Plot all volcano plots
-  volcano_plots <- limma_volcano_plots(metab_limma_all, plot_title, plot_subtitle, plot_xlab, plot_ylab, plot_color_labels)
+  # Define a function to plot significant features individually
+  limma_feature_featureplots <- function(topTable) {
+    featureplots_list <- list()
+    
+    # Loop through the items in the test formula
+    for (i in names(topTable)) {
+      # Retrive the topTable data
+      tt <- topTable[[i]]
+      
+      # Retrieve the input data for just significant features
+      ps_sig_init <- ps_limma_data[rownames(ps_limma_data) %in% rownames(tt),] %>%
+        rotate_df()
+      
+      # Check which test formula variable is contained in this part of the topTable, and save name to 'k'
+      k <- split_formula[which(str_detect(i, split_formula))]
+      
+      # Attach the test variable and rename the test variable column
+      ps_sig <- cbind(ps_sig_init, test_df[, k]) 
+      colnames(ps_sig) <- c(colnames(ps_sig_init), k)
+      
+      # Create a blank list to hold these plots
+      p_list <- list()
+      
+      # Loop through the features
+      for (taxa in rownames(topTable[[i]])) {
+        # Create the plots if test variable is of type numeric
+        if (class(test_df[,k]) == 'numeric') {
+          # Retrieve the adjusted p-value and direction of change
+          adj_p_val <- format(round(tt[taxa, 'adj.P.Val'], 6), scientific = TRUE)
+          log_fc <- round(as.numeric(tt[taxa, 'logFC']), 3)
+          direction <- ifelse(log_fc > 0, 'red', 'blue')
+          
+          # Generate the plot
+          p <- ggplot(ps_sig, aes_string(x = k, y = as.name(taxa))) +
+            geom_smooth(method = 'lm', formula = y ~ x,se = FALSE, color = direction) +
+            stat_poly_eq(method = 'lm', formula = y ~ x, size = 3) +
+            geom_point() +
+            guides(color = 'none') +
+            labs(title = taxa,
+                 subtitle = paste0('Adj. p-value = ', adj_p_val, '; log2FC = ', log_fc),
+                 x = str_to_sentence(k),
+                 y = 'Abundance') +
+            theme(text = element_text(size = 8))
+          
+          p_list[[taxa]] <- p
+        }
+        
+        # Create the plots if test variable is of type character or factor
+        if (class(test_df[,k]) == 'factor') {
+          # Work out the y-positions for manual stats
+          p_ydist <- diff(range(ps_sig[, taxa])) # Distance between min and max y values
+          p_ymax <- max(ps_sig[, taxa]) # Max y value
+          
+          y_position <- p_ymax + (p_ydist / 20)
+          
+          # Do stats and feed in values from limma
+          stats_manual <- wilcox_test(data = ps_sig, formula = as.formula(paste0('`', taxa, '` ~ ', k)), 
+                                      ref.group = levels(test_df[,k])[1], comparisons = list(c(levels(test_df[,k])[1], gsub(k, '', i)))) %>%
+            mutate(limma_padj = format(round(tt[taxa, 'adj.P.Val'], 6), scientific = TRUE),
+                   y.position = y_position)
+          
+          # Generate the plot
+          p <- ggplot(ps_sig, aes_string(x = k, y = as.name(taxa))) +
+            geom_boxplot(aes_string(fill = k)) +
+            geom_dotplot(binaxis = 'y', stackdir = 'center', binwidth = p_ydist / 30) +
+            stat_pvalue_manual(data = stats_manual, label = 'limma_padj', size = 3) +
+            scale_fill_jama(alpha = 0.6) +
+            guides(fill = 'none') + 
+            labs(title = taxa,
+                 x = str_to_sentence(k),
+                 y = 'Abundance') +
+            coord_cartesian(ylim = c(NA, p_ymax + (p_ydist / 10))) + 
+            theme(text = element_text(size = 8))
+          
+          p_list[[taxa]] <- p
+        }
+      }
+      
+      # Add the plots to the feature plots list
+      featureplots_list[[i]] <- p_list
+    }
+    
+    # Return the feature plots list
+    return(featureplots_list)
+  }
+  
+  # Plot all plot types
+  volcano_plots <- limma_volcano_plots(ps_limma_all, plot_title, plot_subtitle, plot_xlab, plot_ylab, plot_color_labels)
+  
+  bar_plots <- limma_bar_plots(ps_limma_signif, plot_title, plot_subtitle, plot_xlab, plot_color_labels)
+  
+  feature_plots <- limma_feature_featureplots(ps_limma_signif)
+  
+  if (!is.null(plot_output_folder)) {
+    # Save volcano plots
+    for (plot in names(volcano_plots)) {
+      if (!is.null(plot_file_prefix)) {
+        plot_fp <- here::here(plot_output_folder, paste(plot_file_prefix, plot, 'volcplot.pdf', sep = '_'))
+      } else {
+        plot_fp <- here::here(plot_output_folder, paste('ps_limma', plot, 'volcplot.pdf', sep = '_'))
+      }
+      ggsave(plot_fp, volcano_plots[[plot]], width = 20, height = 16, units = 'cm')
+    }
+    
+    # Save bar plots
+    for (plot in names(bar_plots)) {
+      if (!is.null(plot_file_prefix)) {
+        plot_fp <- here::here(plot_output_folder, paste(plot_file_prefix, plot, 'barplot.pdf', sep = '_'))
+      } else {
+        plot_fp <- here::here(plot_output_folder, paste('ps_limma', plot, 'barplot.pdf', sep = '_'))
+      }
+      
+      if (nrow(ps_limma_signif[[plot]] > 0)) {
+        barplot_height <- (nrow(ps_limma_signif[[plot]]) * 0.4) + 2.5
+        ggsave(plot_fp, bar_plots[[plot]], width = 20, height = barplot_height, units = 'cm')
+      }
+    }
+    
+    # Save feature plots
+    for (plot in names(feature_plots)) {
+      if (!is.null(plot_file_prefix)) {
+        plot_fp <- here::here(plot_output_folder, paste(plot_file_prefix, plot, 'featureplots.pdf', sep = '_'))
+      } else {
+        plot_fp <- here::here(plot_output_folder, paste('ps_limma', plot, 'featureplots.pdf', sep = '_'))
+      }
+      
+      if (length(feature_plots[[plot]]) > 0) {
+        plot_pages <- ggarrange(plotlist = feature_plots[[plot]], nrow = 4, ncol = 3)
+        
+        pdf(file = plot_fp, width = 8.5, height = 11, bg = 'white')
+        if (class(plot_pages)[1] != 'list') {
+          print(plot_pages)
+        } else {
+          for (i in 1:length(plot_pages)) {
+            print(plot_pages[[i]])
+          }
+        }
+        dev.off()
+      }
+    }
+  }
+  
   
   # Make a list of all components above to return from function
   if (use_contrast_matrix) {
     return_list <- list(input_data = ps_limma_data,
+                        input_metadata = data.frame(sample_data(phyloseq_object)),
                         test_variables = test_df,
                         model_matrix = ps_limma_design,
                         contrast_matrix = cont_matrix,
                         limma_significant = ps_limma_signif,
                         limma_all = ps_limma_all,
                         volcano_plots = volcano_plots,
+                        bar_plots = bar_plots,
+                        feature_plots = feature_plots,
                         venn_diagram = venn_diagram)
   } else {
     return_list <- list(input_data = ps_limma_data,
+                        input_metadata = data.frame(sample_data(phyloseq_object)),
                         test_variables = test_df,
                         model_matrix = ps_limma_design,
                         coefficients = coefficients,
                         limma_significant = ps_limma_signif,
                         limma_all = ps_limma_all,
                         volcano_plots = volcano_plots,
+                        bar_plots = bar_plots,
+                        feature_plots = feature_plots,
                         venn_diagram = venn_diagram)
   }
   
