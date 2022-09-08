@@ -198,7 +198,7 @@ bact_limma_age$volcano_plots$Age
 
 This will produce a volcano plot that looks something like this (the taxa names have been omitted, but will normally appear):
 
-<div text-align="center">
+<div align="center">
   <img src="./assets/bact_volc_plot.png" width = 75%>
 </div>
 
@@ -227,7 +227,7 @@ for (day in levels(bact@sam_data$days_postTx)) { # loop through the unique value
   bact_tmp <- prune_samples(bact@sam_data$days_postTx == day, bact) # create temporary subsets of the phyloseq object
   
   p <- plot_ordination(bact_tmp, ordinate(bact_tmp, met, dist, weighted = TRUE), # ordinate via the phyloseq plot_ordination() function
-                       title = paste0(day, ' days post-Tx')) +
+                       title = paste0(day, ' days post-treatment')) +
     stat_ellipse(aes(fill = group), geom = 'polygon', type = 't', level = 0.95, alpha = 0.2) + # add group ellipses
     scale_shape_identity() +
     geom_point(aes(fill = group), shape = 21, size = 3) + # add the individual data points
@@ -246,4 +246,110 @@ ggsave(here::here('figures', 'ordination', 'bact_PCoA_ordination_by_time.pdf'), 
 
 The resulting output file looks like this:
 
-<img src="./assets/bact_PCoA_ordination_by_time.jpeg" width = 75%>
+<div align="center">
+  <img src="./assets/bact_PCoA_ordination_by_time.jpeg" width = 75%>
+</div>
+
+### Differential abundance with `phyloseq_limma()`
+
+We can see that there appears to be some good separation of groups at days 7, 14, and 21 post-treatment. Therefore we will probably decide to do some differential abundance testing, and the `phyloseq_limma()` function above can handle this for us, as well as generate and save all of the relevant exploratory plots we will want initially to inspect the differences between groups.
+
+Because lists are a great way to keep everything organised (and minimise the growing number of variables in your R environment), we will separate the phyloseq object into multiple subsets (one for each time point), and store these within a list called `input_data`, which itself sits inside a main list that will house both the input data and the results from statistical analyses of that input data &ndash; you may want to run several variations with different statistical thresholds or test variable combinations for example. By storing everything in a master list, you keep all the inputs and outputs together.
+
+#### Creating the master list
+
+We will separate the bacteria by time and store these "sub-`phyloseq` objects" within a container list called `input_data`. This container object is a sub-list that contains each of the datasets separated by time, and sits inside a "master list" that will also hold any statistical tests we run on the data.
+
+```r
+# Split the data by time
+bact_time_split <- list(input_data = list(day0 = subset_samples(bact_data_logCSS, days_postTx == '0'),
+                                          day7 = subset_samples(bact_data_logCSS, days_postTx == '7'),
+                                          day14 = subset_samples(bact_data_logCSS, days_postTx == '14'),
+                                          day21 = subset_samples(bact_data_logCSS, days_postTx == '21'),
+                                          day28 = subset_samples(bact_data_logCSS, days_postTx == '28')))
+```
+
+The data now has the following structure:
+
+```r
+bact_time_split # class = list
+  |
+  |---input_data # class = list
+        |
+        |---day0 # class = phyloseq
+        |---day7 # class = phyloseq
+        |---day14 # class = phyloseq
+        |---day21 # class = phyloseq
+        |---day28 # class = phyloseq
+```
+
+From here, we can loop through the `phyloseq` object contained with the `input_data` list, and run `phyloseq_limma()`.
+
+```r
+# Loop over the custom phyloseq_limma function
+bact_time_split$limma_groupDA_ASV <- list() # create an empty list to store outputs
+for (day in names(bact_time_split$input_data)) { # loop over the names in 'input_data', assigning each successively to the 'day' variable
+  bact_phyloseq <- bact_time_split$input_data[[day]] # retrieve the appropriate phyloseq object
+  limma_groupDA <- phyloseq_limma(phyloseq_object = bact_phyloseq,
+                                  tax_id_col = 'ID', # the ASV ID column is just 'ID'
+                                  model_formula_as_string = '~ group',
+                                  coefficients = 2,
+                                  plot_output_folder = here::here('figures', 'limma_DA', 'treatment_group', 'ASV'), # output plots will be saved here
+                                  plot_file_prefix = paste0('tx_group_', day),
+                                  volc_plot_title = paste0('DA ASVs - ', day, ' post-treatment'))
+  bact_time_split$limma_groupDA_ASV[[day]] <- limma_groupDA # add the output from the limma function to the list
+}
+```
+
+After this step, our data now has the following structure
+
+```r
+bact_time_split # class = list
+  |
+  |---input_data # class = list
+  |     |
+  |     |---day0 # class = phyloseq
+  |     |---day7 # class = phyloseq
+  |     |---day14 # class = phyloseq
+  |     |---day21 # class = phyloseq
+  |     |---day28 # class = phyloseq
+  |
+  ----limma_groupDA_ASV #class = list
+        |
+        |---day0 # class = list
+        |     |
+        |     |---input_data # class = data.frame
+        |     |---input_metadata # class = data.frame
+        |     |---test_variables # class = data.frame
+        |     |---model_matrix # class = double
+        |     |---coefficients # class = double
+        |     |---limma_significant # class = list
+        |     |     |
+        |     |     |---groupDrugXYZ # class = data.frame
+        |     |
+        |     |---limma_all # class = list
+        |     |     |
+        |     |     |---groupDrugXYZ # class = data.frame
+        |     |
+        |     |---volcano_plots # class = list
+        |     |     |
+        |     |     |---groupDrugXYZ # class = ggplot
+        |     |
+        |     |---bar_plots # class = list
+        |     |     |
+        |     |     |---groupDrugXYZ # class = ggplot
+        |     |
+        |     |---feature_plots # class = list
+        |     |     |
+        |     |     |---groupDrugXYZ # class = list
+        |     |           |
+        |     |           |---significant_feature1 # class = ggplot
+        |     |           |---significant_feature2 # class = ggplot
+        |     |           |---etc.
+        |     |---venn_diagram
+        |
+        |---day7 # class = list (as per day0)
+        |---day14 # class = list (as per day0)
+        |---day21 # class = list (as per day0)
+        |---day28 #class = list (as per day0)
+```
