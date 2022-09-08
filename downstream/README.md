@@ -148,23 +148,35 @@ Say we now want to see whether there are bacteria that are differentially abunda
 - `adj_pval_threshold` (default = 0.05): the minimum level deemed significant.
 - `logFC_threshold` (default = 1): the minimum log-fold change deemed meaningful.
 - `legend_metadata_string`: optional - a custom name for colour or fill options.
-- `volc_plot_title`: optional - a custom title for the volcano plot.
-- `volc_plot_subtitle`: optional - a custom subtitle for the volcano plot.
+- `volc_plot_title`: optional - a custom title for the volcano plot (will be reused for the associated bar plots and individual feature plots).
+- `volc_plot_subtitle`: optional - a custom subtitle for the volcano plot (will be reused for the associated bar plots and individual feature plots).
 - `volc_plot_xlab`: optional - a custom x label for the volcano plot.
 - `volc_plot_ylab`: optional - a custom y label for the volcano plot.
+- `remove_low_variance_taxa` (default = FALSE): optional - if TRUE, the phyloseq OTU table will be checked for feature-wise variance, and all features with zero variance will be removed prior to downstream analysis. Limma may throw an error if most of the features have no variance, so this step is sometimes required for certain datasets.
+- `plot_output_folder`: optional - the path to a folder where you would like output plots to be saved. If left blank, no plots will be saved.
+- `plot_file_prefix`: optional - a string to attach to the start of the individual file names for your plots. This input is only used if the `plot_output_folder` argument is also provided.
 
 ### Function output
 
 The function will return a list with different outputs from the function.
 
 - `input_data`: the original OTU data used to run the analysis.
-- `test_variables`: a data.frame with the metadata variables used for the analysis.
+- `input_metadata`: a data.frame with the original metadata you provided.
+- `test_variables`: a data.frame with the subset of metadata variables used for the analysis.
 - `model_matrix`: the model matrix generated (or provided) to the function.
 - `constrast_matrix` OR `coefficients`: either the contrast matrix used, or the coefficients selected, depending on the analysis you chose to run.
 - `limma_significant`: a list of data.frames containing the signficant taxa determined by the limma function, with the adjusted p-value and logFC threshold selected, for each comparison/coefficient.
 - `limma_all`: a list of data.frames containing the significance levels of DA analysis for all taxa for each comparison/coefficient.
 - `volcano_plots`: volcano plots for each of the comparisons/coefficients selected.
+- `bar_plots`: bar plots combining significant features for each of the comparisons/coefficients selected. The x-axis shows the log2FC value calculated by limma, with feature names on the y-axis, ordered by the effect magnitude.
+- `feature_plots`: individual box plots for each feature, for each of the comparisons/coefficients selected. A significance bar will only be shown for the groups being compared, however all groups (if there are more than two) will be plotted for reference.
 - `venn_diagram`: a Venn diagram that will show up when you run the function.
+
+If a plot output folder path is provided, for each comparison/coefficient you have selected, three output .pdf files will be generated (provided there is at least 1 significant difference detected):
+
+- `{plot_file_prefix}_{test_variable + group}_volcplot.pdf`: a volcano plot showing all features, with significant feaetures labelled, decreased features in blue and increased features in red.
+- `{plot_file_prefix}_{test_variable + group}_barplot.pdf`: a bar plot showing significant features, with the log2FC on the x-axis and feature name on the y-axis. The y-axis is ordered by the log2FC magnitude, with the lowest at the bottom and highest at the top. Negative log2FC features are coloured blue, while positive ones are coloured red. The output plot automatically resizes depending on the number of variables being plotted.
+- `{plot_file_prefix}_{test_variable + group}_featureplots.pdf`: individual box plots for each feature, for each of the comparisons/coefficients selected. A significance bar will only be shown for the groups being compared, however all groups (if there are more than two) will be plotted for reference. These plots are arranged with 12 features to a page (3 columns and 4 rows). Multiple pages will be combined into a single output .pdf file if there are more than 12 significant features.
 
 ### Continuous example
 

@@ -1,5 +1,5 @@
 ############################################################################################
-# Copyright (c) 2022 - Respiratory Immunology Lab, Monash University, Melbourne, Australia #
+# Copyright (c) 2022 - Mucosal Immunology Lab, Monash University, Melbourne, Australia     #
 # Author: Matthew Macowan                                                                  #
 # This script is provided under the MIT licence (see LICENSE.txt for details)              #
 ############################################################################################
