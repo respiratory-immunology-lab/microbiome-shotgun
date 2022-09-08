@@ -215,7 +215,19 @@ bact_limma_age$volcano_plots$Age
 This will produce a volcano plot that looks something like this (the taxa names have been omitted, but will normally appear):
 
 <div align="center">
-  <img src="./assets/bact_volc_plot.png" width = 75%>
+  <img src="./assets/bact_volc_plot.png" width=75%>
+</div>
+
+In another example looking at differences between treatment groups, the bar plot produced looks like this:
+
+<div align="center">
+  <img src="./assets/tx_group_groupDrugXYZ_barplot.jpeg" width=75%>
+</div>
+
+An example of the feature plots output is shown here:
+
+<div align="center">
+  <img src="./assets/tx_group_groupDrugXYZ_featureplots.jpeg" width=75%>
 </div>
 
 
