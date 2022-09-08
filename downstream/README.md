@@ -198,5 +198,52 @@ bact_limma_age$volcano_plots$Age
 
 This will produce a volcano plot that looks something like this (the taxa names have been omitted, but will normally appear):
 
+<div text-align="center">
+  <img src="./assets/bact_volc_plot.png" width = 75%>
+</div>
 
-<img src="https://github.com/respiratory-immunology-lab/microbiome-shotgun/blob/master/downstream/assets/bact_volc_plot.png" width = 75%>
+
+## Example of splitting a phyloseq
+
+Say you have a single phyloseq object from a time-course study and want to compare the differences between the groups at each discrete time point.
+
+### Beta-diversity
+
+Firstly we may want to assess beta-diversity. Because the taxonomic composition may vary greatly with time, if we were to plot ordination plots for all samples together, we may lose clarity and minimise resolution/separation of data points at each of the time points individually.
+
+In this example, we have 16S rRNA sequencing data (preprocessed via the DADA2 pipeline) at 5 time points of interest in a drug treatment study: we have a zero timepoint, and four subsequent timepoints. We have one drug-treated group and a control sham-treated group. 
+
+To save time and code, let's loop through the ordinations at each timepoint by creating temporary `phyloseq` subsets, add their plotted ordinations to a plot list, and finally combine the plots into a single figure with `ggarrange()`.
+
+```r
+# Choose parameters for downstream analyses
+met <- 'PCoA'
+dist <- 'unifrac'
+bact <- bact_data_logCSS
+
+# Bacterial ordination (separately for each temporal group)
+ord_list <- list() # blank list to hold ordination plots
+for (day in levels(bact@sam_data$days_postTx)) { # loop through the unique values of 'days_postTx' in the phyloseq sample_data()
+  bact_tmp <- prune_samples(bact@sam_data$days_postTx == day, bact) # create temporary subsets of the phyloseq object
+  
+  p <- plot_ordination(bact_tmp, ordinate(bact_tmp, met, dist, weighted = TRUE), # ordinate via the phyloseq plot_ordination() function
+                       title = paste0(day, ' days post-Tx')) +
+    stat_ellipse(aes(fill = group), geom = 'polygon', type = 't', level = 0.95, alpha = 0.2) + # add group ellipses
+    scale_shape_identity() +
+    geom_point(aes(fill = group), shape = 21, size = 3) + # add the individual data points
+    scale_fill_jama(name = 'Treatment Group') # scale the fill colour using ggsci scale_fill_jama() function
+  
+  ord_list[[day]] <- p # add the plot to the plot list
+}
+
+# Arrange ordination plots using ggpubr ggarrange() function
+ord_plots <- ggarrange(plotlist = ord_list, nrow = 2, ncol = 3, common.legend = TRUE)
+(ord_plots <- annotate_figure(ord_plots,
+                              top = text_grob(label = paste0('Bacteria ', met, ' ', dist, ' ordination'))))
+ggsave(here::here('figures', 'ordination', 'bact_PCoA_ordination_by_time.pdf'), ord_plots, # Save combined figure
+       width = 20, height = 16, units = 'cm')
+```
+
+The resulting output file looks like this:
+
+<img src="./assets/bact_PCoA_ordination_by_time.jpeg" width = 75%>
