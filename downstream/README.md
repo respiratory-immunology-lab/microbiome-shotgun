@@ -2,6 +2,22 @@
 
 Given that much of the quality control and filtering of our shotgun metagenomic data has already taken place using the Sunbeam pipeline, and we also have taxonomic assignments using the combined power of the Kraken2 and Bracken tools, we do not require as much local pre-processing of data in R before downstream analysis.
 
+## Table of Contents
+
+  - [Load Kraken2/Bracken output](#load-kraken2bracken-output)
+    - [Prepare metadata](#prepare-metadata)
+    - [Import data into a phyloseq object](#import-data-into-a-phyloseq-object)
+  - [Filtering and normalisation](#filtering-and-normalisation)
+    - [Diversity](#diversity)
+  - [Normalisation](#normalisation)
+  - [Limma wrapper function for differential abundance testing](#limma-wrapper-function-for-differential-abundance-testing)
+    - [Arguments for `phyloseq_limma()`](#arguments-for-phyloseq_limma)
+    - [Function output](#function-output)
+    - [Continuous example](#continuous-example)
+  - [Example of splitting a phyloseq](#example-of-splitting-a-phyloseq)
+    - [Beta-diversity](#beta-diversity)
+    - [Differential abundance with `phyloseq_limma()`](#differential-abundance-with-phyloseq_limma)
+
 ## Load Kraken2/Bracken output
 
 The first step is to load in your `all_samples_kraken2.csv` or `all_samples_bracken.csv` file, and extract the OTU ID and consensus lineage information. This will help set you up for preparation of a `phyloseq` container object to hold your data.
@@ -282,6 +298,8 @@ bact_time_split # class = list
         |---day21 # class = phyloseq
         |---day28 # class = phyloseq
 ```
+
+### Looping through the master list to test for DA taxa
 
 From here, we can loop through the `phyloseq` object contained with the `input_data` list, and run `phyloseq_limma()`.
 
