@@ -299,7 +299,7 @@ bact_time_split # class = list
         |---day28 # class = phyloseq
 ```
 
-### Looping through the master list to test for DA taxa
+#### Looping through the master list to test for DA taxa
 
 From here, we can loop through the `phyloseq` object contained with the `input_data` list, and run `phyloseq_limma()`.
 
