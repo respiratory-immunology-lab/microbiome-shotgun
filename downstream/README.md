@@ -319,7 +319,7 @@ for (day in names(bact_time_split$input_data)) { # loop over the names in 'input
 }
 ```
 
-After this step, our data now has the following structure
+After this step, our data now has the following structure:
 
 ```r
 bact_time_split # class = list
