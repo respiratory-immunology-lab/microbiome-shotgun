@@ -398,7 +398,6 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
           log_fc <- round(as.numeric(tt[taxa, 'logFC']), 3)
           direction <- ifelse(log_fc > 0, 'red', 'blue')
           
-<<<<<<< HEAD
           # Generate subtitle depending on adjust method
           if (adjust_method == 'none') {
             p_subtitle <- paste0('p-value = ', adj_p_val, '; log2FC = ', log_fc)
@@ -406,8 +405,6 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
             p_subtitle <- paste0('Adj. p-value = ', adj_p_val, '; log2FC = ', log_fc)
           }
           
-=======
->>>>>>> 12058a6517f4e616b965b85e20780521687680ee
           # Generate the plot
           p <- ggplot(ps_sig, aes_string(x = k, y = as.name(taxa))) +
             geom_smooth(method = 'lm', formula = y ~ x,se = FALSE, color = direction) +
@@ -415,11 +412,7 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
             geom_point() +
             guides(color = 'none') +
             labs(title = taxa,
-<<<<<<< HEAD
                  subtitle = p_subtitle,
-=======
-                 subtitle = paste0('Adj. p-value = ', adj_p_val, '; log2FC = ', log_fc),
->>>>>>> 12058a6517f4e616b965b85e20780521687680ee
                  x = str_to_sentence(k),
                  y = 'Abundance') +
             theme(text = element_text(size = 8))
