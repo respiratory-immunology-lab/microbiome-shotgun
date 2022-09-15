@@ -430,7 +430,8 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
           
           # Do stats and feed in values from limma
           stats_manual <- wilcox_test(data = ps_sig, formula = as.formula(paste0('`', taxa, '` ~ ', k)), 
-                                      ref.group = levels(test_df[,k])[1], comparisons = list(c(levels(test_df[,k])[1], gsub(k, '', i)))) %>%
+                                      ref.group = levels(test_df[,k])[1], 
+                                      comparisons = list(c(levels(test_df[,k])[1], gsub(k, '', i)))) %>%
             mutate(limma_padj = format(round(tt[taxa, 'adj.P.Val'], 6), scientific = TRUE),
                    y.position = y_position)
           
@@ -486,7 +487,8 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
       }
       
       if (nrow(ps_limma_signif[[plot]] > 0)) {
-        barplot_height <- (nrow(ps_limma_signif[[plot]]) * 0.4) + 2.5
+        ps_limma_signif_rows <- ifelse(nrow(ps_limma_signif[[plot]]) > 40, 40, nrow(ps_limma_signif[[plot]]))
+        barplot_height <- (ps_limma_signif_rows * 0.4) + 2.5
         ggsave(plot_fp, bar_plots[[plot]], width = 20, height = barplot_height, units = 'cm')
       }
     }
