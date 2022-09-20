@@ -47,7 +47,7 @@ phyloseq_limma <- function(phyloseq_object, metadata_var = NULL, metadata_condit
     phyloseq_object <- prune_samples(metadata_condition, phyloseq_object)
   }
   
-  # Check the the tax_id_col is equal to the most deepest classification where not all value are NA where provided
+  # Check the the tax_id_col is equal to the deepest classification where not all values are NA where provided
   input_tax_table <- data.frame(tax_table(phyloseq_object))
   input_tax_table_not_na <- names(which(colSums(data.frame(is.na(input_tax_table))) < nrow(input_tax_table)))
   max_input_tax_level <- input_tax_table_not_na[length(input_tax_table_not_na)]
