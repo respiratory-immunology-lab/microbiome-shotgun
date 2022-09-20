@@ -19,18 +19,22 @@ phyloseq_limma <- function(phyloseq_object, metadata_var = NULL, metadata_condit
   }
   
   # Perform sanity checks
-  if (is.null(model_formula_as_string) & is.null(metadata_var)) {
+  if (is.null(model_formula_as_string) && is.null(metadata_var)) {
     stop('Please provide at least one of the following: a) preferably a model formula as a string 
          (arg = model_formula_as_string), or b) the name of a single sample_data column (arg = metadata_var).')
   }
-  if (!is.null(model_formula_as_string) & !is.null(metadata_var)) {
+  if (!is.null(model_formula_as_string) && !is.null(metadata_var)) {
     metadata_var <- NULL
-    message('Please note that because you provided inputs for both model_formula_as_string and metadata_vars,
+    message('Please note that because you provided inputs for both model_formula_as_string and metadata_vars, 
             only the model_formula_as_string input will be used.')
   }
-  if (!is.null(metadata_var) & length(metadata_var) > 1) {
+  if (!is.null(metadata_var) && length(metadata_var) > 1) {
     stop('When using the metadata_var argument, you can only select a single variable from the phyloseq object\'s
          sample_data. If you want to include more, you can provide an input to model_formula_as_string instead.')
+  }
+  if (!is.null(model_formula_as_string) && is.null(coefficients)) {
+    stop('As you have selected to use coefficients instead of a contrast matrix, please assign indices to the 
+           coefficients parameter to select coefficients you want to retain for Bayes statistics.')
   }
   
   # Set 'use_contrast_matrix' to FALSE if coefficients are provided
