@@ -8,7 +8,7 @@ phyloseq_limma <- function(phyloseq_object, metadata_var = NULL, metadata_condit
                            model_formula_as_string = NULL, use_contrast_matrix = TRUE, coefficients = NULL,
                            factor_reorder_list = NULL, continuous_modifier_list = NULL,
                            contrast_matrix = NULL, adjust_method = 'BH', rownames = NULL, 
-                           tax_id_col = 'taxa', adj_pval_threshold = 0.05, logFC_threshold = 1, 
+                           tax_id_col = NULL, adj_pval_threshold = 0.05, logFC_threshold = 1, 
                            legend_metadata_string = NULL, volc_plot_title = NULL, volc_plot_subtitle = NULL,
                            volc_plot_xlab = NULL, volc_plot_ylab = NULL, remove_low_variance_taxa = FALSE,
                            plot_output_folder = NULL, plot_file_prefix = NULL) {
@@ -47,17 +47,19 @@ phyloseq_limma <- function(phyloseq_object, metadata_var = NULL, metadata_condit
     phyloseq_object <- prune_samples(metadata_condition, phyloseq_object)
   }
   
-  # Check the the tax_id_col is equal to the deepest classification where not all values are NA where provided
+  # Check the the tax_id_col is equal to the most deepest classification where not all value are NA where provided
   input_tax_table <- data.frame(tax_table(phyloseq_object))
   input_tax_table_not_na <- names(which(colSums(data.frame(is.na(input_tax_table))) < nrow(input_tax_table)))
   max_input_tax_level <- input_tax_table_not_na[length(input_tax_table_not_na)]
   
-  if (!is.null(tax_id_col) & tax_id_col != max_input_tax_level) {
-    stop('The tax ID column you have provided does not match the name of the tax_table column
+  if (!is.null(tax_id_col)) {
+    if (tax_id_col != max_input_tax_level) {
+      stop('The tax ID column you have provided does not match the name of the tax_table column
            with the deepest taxonomic classification for which non-NA values exist.
            Either let the function choose the tax_id_col for you, or if you want to test at a
            different taxonomic level, please use the phyloseq::tax_glom function to agglomerate
            your data.')
+    }
   } else if (is.null(tax_id_col)) {
     tax_id_col <- max_input_tax_level
   }
