@@ -4,7 +4,7 @@
 # This script is provided under the MIT licence (see LICENSE.txt for details)              #
 ############################################################################################
 
-phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condition = NULL, model_matrix = NULL,
+phyloseq_limma <- function(phyloseq_object, metadata_var = NULL, metadata_condition = NULL, model_matrix = NULL,
                            model_formula_as_string = NULL, use_contrast_matrix = TRUE, coefficients = NULL,
                            factor_reorder_list = NULL, continuous_modifier_list = NULL,
                            contrast_matrix = NULL, adjust_method = 'BH', rownames = NULL, 
@@ -18,6 +18,21 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
     suppressPackageStartupMessages(library(pkg, character.only = TRUE))
   }
   
+  # Perform sanity checks
+  if (is.null(model_formula_as_string) & is.null(metadata_var)) {
+    stop('Please provide at least one of the following: a) preferably a model formula as a string 
+         (arg = model_formula_as_string), or b) the name of a single sample_data column (arg = metadata_var).')
+  }
+  if (!is.null(model_formula_as_string) & !is.null(metadata_var)) {
+    metadata_var <- NULL
+    message('Please note that because you provided inputs for both model_formula_as_string and metadata_vars,
+            only the model_formula_as_string input will be used.')
+  }
+  if (!is.null(metadata_var) & length(metadata_var) > 1) {
+    stop('When using the metadata_var argument, you can only select a single variable from the phyloseq object\'s
+         sample_data. If you want to include more, you can provide an input to model_formula_as_string instead.')
+  }
+  
   # Set 'use_contrast_matrix' to FALSE if coefficients are provided
   if (!is.null(coefficients)) {
     use_contrast_matrix <- FALSE
@@ -26,6 +41,21 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
   # Filter phyloseq object by the conditional statement if present
   if(!is.null(metadata_condition)) {
     phyloseq_object <- prune_samples(metadata_condition, phyloseq_object)
+  }
+  
+  # Check the the tax_id_col is equal to the most deepest classification where not all value are NA where provided
+  input_tax_table <- data.frame(tax_table(phyloseq_object))
+  input_tax_table_not_na <- names(which(colSums(data.frame(is.na(input_tax_table))) < nrow(input_tax_table)))
+  max_input_tax_level <- input_tax_table_not_na[length(input_tax_table_not_na)]
+  
+  if (!is.null(tax_id_col) & tax_id_col != max_input_tax_level) {
+    stop('The tax ID column you have provided does not match the name of the tax_table column
+           with the deepest taxonomic classification for which non-NA values exist.
+           Either let the function choose the tax_id_col for you, or if you want to test at a
+           different taxonomic level, please use the phyloseq::tax_glom function to agglomerate
+           your data.')
+  } else if (is.null(tax_id_col)) {
+    tax_id_col <- max_input_tax_level
   }
   
   # Prune unknown taxa
@@ -49,11 +79,11 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
   }
   
   # Ensure that NA values are actually NA, and not character type 'NA'
-  if (!is.null(metadata_vars)) {
+  if (!is.null(metadata_var)) {
     if (!is.null(metadata_condition)) {
-      test_df <- data.frame(sample_data(phyloseq_object)[, metadata_vars])[metadata_condition,]
+      test_df <- data.frame(sample_data(phyloseq_object)[, metadata_var])[metadata_condition,]
     } else {
-      test_df <- data.frame(sample_data(phyloseq_object)[, metadata_vars])
+      test_df <- data.frame(sample_data(phyloseq_object)[, metadata_var])
     }
   } else {
     if (!is.null(metadata_condition)) {
@@ -128,8 +158,8 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
   # Create design matrix if none provided
   if (is.null(model_matrix)) {
     if (is.null(model_formula_as_string)) {
-      if (!is.null(metadata_vars)) {
-        if (length(metadata_vars == 1)) {
+      if (!is.null(metadata_var)) {
+        if (length(metadata_var == 1)) {
           ps_limma_design <- model.matrix(~ 0 + test_df[,1])
           colnames(ps_limma_design) <- levels(test_df[,1])
         } else {
@@ -137,7 +167,7 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
         }
       } else {
         stop('Please provide either a model matrix or a formula (as a string - using a combination of the metadata variables you selected) for use with limma.
-             Alternatively, please provide a single character value to the metadata_vars paramter that matches one of the variables in the phyloseq sample data object.')
+             Alternatively, please provide a single character value to the metadata_var paramter that matches one of the variables in the phyloseq sample data object.')
       }
     } else {
       ps_limma_design <- model.matrix(as.formula(model_formula_as_string), data = test_df)
@@ -380,11 +410,20 @@ phyloseq_limma <- function(phyloseq_object, metadata_vars = NULL, metadata_condi
         rotate_df()
       
       # Check which test formula variable is contained in this part of the topTable, and save name to 'k'
-      k <- split_formula[which(str_detect(i, split_formula))]
+      if (is.null(model_formula_as_string)) {
+        k <- metadata_var
+      } else {
+        k <- split_formula[which(str_detect(i, split_formula))]
+      }
       
       # Attach the test variable and rename the test variable column
-      ps_sig <- cbind(ps_sig_init, test_df[, k]) 
-      colnames(ps_sig) <- c(colnames(ps_sig_init), k)
+      if (is.null(model_formula_as_string)) {
+        ps_sig <- cbind(ps_sig_init, test_df[, metadata_var])
+        colnames(ps_sig) <- c(colnames(ps_sig_init), metadata_var)
+      } else {
+        ps_sig <- cbind(ps_sig_init, test_df[, k]) 
+        colnames(ps_sig) <- c(colnames(ps_sig_init), k)
+      }
       
       # Create a blank list to hold these plots
       p_list <- list()

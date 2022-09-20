@@ -149,7 +149,7 @@ Say we now want to see whether there are bacteria that are differentially abunda
 ### Arguments for `phyloseq_limma()`
 
 - `phyloseq_object`: a phyloseq object to use for differential abundance testing.
-- `metadata_vars`: optional - a character vector of column(s) to keep for DA testing (NOT required if providing a formula).
+- `metadata_var`: optional - the name of a **single** column from the `sample_data` to use for DA testing (e.g. `metadata_var = 'group'`). **NOT** required if providing a formula - it will be changed to `NULL` if `model_formula_as_string` is also provided.
 - `metadata_condition`: optional - a conditional statement about a certain metadata value, e.g. keeping a certain age group only.
 - `model_matrix`: optional - best to let the function create the model matrix for you.
 - `model_formula_as_string`: just like it sounds - a string containing the model formula you want to use (only works with '+' and not '*' at this stage).
@@ -160,7 +160,7 @@ Say we now want to see whether there are bacteria that are differentially abunda
 - `contrast_matrix`: optional - best to let the function create the contrast matrix for you.
 - `adjust_method`: optional - the method used to correct for multiple comparisons, listed [here](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/p.adjust).
 - `rownames`: optional - a custom vector of names to be used if you don't wish the names to be automatically derived from taxonomy.
-- `tax_id_col`: the phyloseq object `tax_table` column you wish to use for naming - this should match the level being tested.
+- `tax_id_col`: optional - the phyloseq object `tax_table` column you wish to use for naming - this should match the level being tested (and should also match the deepest taxonomic level in the phyloseq object - if you want to test a higher level then agglomerate the data using the `phyloseq::tax_glom()` function). If you do not provide this, then the function will automatically select the deepest level (i.e. the right-most `tax_table` column that isn't comprised of all `NA` values).
 - `adj_pval_threshold` (default = 0.05): the minimum level deemed significant.
 - `logFC_threshold` (default = 1): the minimum log-fold change deemed meaningful.
 - `legend_metadata_string`: optional - a custom name for colour or fill options.
@@ -202,7 +202,6 @@ If we have longitudinal microbiome sampling, we may want to know which taxa chan
 # Run custom limma continuous function for taxa vs age
 bact_limma_age <- phyloseq_limma(phyloseq_object = bact_kraken2_logCSS,
                                  model_formula_as_string = '~ Age + Individual',
-                                 tax_id_col = 'taxa',
                                  continuous_modifier_list = list(Age = function (x) x / 365),
                                  coefficients = 2,
                                  volc_plot_title = 'Differentially Abundant Taxa over Time',
