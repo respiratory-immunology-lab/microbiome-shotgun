@@ -13,9 +13,23 @@ phyloseq_limma <- function(phyloseq_object, metadata_var = NULL, metadata_condit
                            volc_plot_xlab = NULL, volc_plot_ylab = NULL, remove_low_variance_taxa = FALSE,
                            plot_output_folder = NULL, plot_file_prefix = NULL) {
   # Load required packages
-  pkgs <- c('data.table', 'tidyverse', 'phyloseq', 'limma', 'ggplot2', 'ggpmisc', 'stringr')
+  pkgs <- c('BiocGenerics', 'base', 'ggtree', 'ggplot2', 'IRanges', 'Matrix', 'S4Vectors', 'biomformat', 'plotly', 
+            'dplyr', 'rstatix', 'ggpubr', 'stats', 'phyloseq', 'SummarizedExperiment', 'ggpmisc', 'ggrepel', 'ggsci', 
+            'grDevices', 'here', 'limma', 'stringr')
   for (pkg in pkgs) {
     suppressPackageStartupMessages(library(pkg, character.only = TRUE))
+  }
+  
+  # Function to rotate a data.frame and maintain names
+  rotate_df <- function(data){
+    names_row <- rownames(data)
+    names_col <- colnames(data)
+    
+    data_rotated <- data.frame(t(data))
+    rownames(data_rotated) <- names_col
+    colnames(data_rotated) <- names_row
+    
+    data_rotated
   }
   
   # Perform sanity checks
