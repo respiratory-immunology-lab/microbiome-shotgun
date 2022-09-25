@@ -50,6 +50,11 @@ phyloseq_limma <- function(phyloseq_object, metadata_var = NULL, metadata_condit
     stop('As you have selected to use coefficients instead of a contrast matrix, please assign indices to the 
            coefficients parameter to select coefficients you want to retain for Bayes statistics.')
   }
+  if (nrow(otu_table(phyloseq_object)) != nrow(tax_table(phyloseq_object))) {
+    stop('Please ensure that the OTU table and tax table of your phyloseq object have the same number of rows. 
+         This should be the case if you have generated your phyloseq object correctly, and ensured that 
+         taxa_are_rows = TRUE. I.e. "OTU <- otu_table(otu_matrix, taxa_are_rows = TRUE)".')
+  }
   
   # Set 'use_contrast_matrix' to FALSE if coefficients are provided
   if (!is.null(coefficients)) {
